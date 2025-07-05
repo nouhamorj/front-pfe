@@ -16,7 +16,7 @@ const HomeRouter = () => {
 
   if (!user || !user.role) {
     console.log('HomeRouter - No user or role, redirecting to /login');
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/se-connecter" replace />;
   }
 
   const role = user.role.toLowerCase();

@@ -95,7 +95,7 @@ export default function SignIn() {
               <div className="mt-4 flex items-center justify-between space-x-2">
                 <Checkbox label="Se souvenir de moi" />
                 <a
-                  href="##"
+                  href="/mot-de-passe-oublie"
                   className="text-xs text-gray-400 transition-colors hover:text-gray-800 focus:text-gray-800 dark:text-dark-300 dark:hover:text-dark-100 dark:focus:text-dark-100"
                 >
                   Mot de passe oublié ?

@@ -5,9 +5,21 @@ const ghostRoutes = {
   Component: GhostGuard,
   children: [
     {
-      path: "login",
+      path: "se-connecter",
       lazy: async () => ({
         Component: (await import("app/pages/Auth")).default,
+      }),
+    },
+    {
+      path : "mot-de-passe-oublie",
+      lazy : async () => ({
+          Component: (await import("app/pages/Auth/forget_password")).default,
+      }),
+    },
+    {
+      path : "nouveau-mot-de-passe/:token",
+      lazy : async () => ({
+          Component: (await import("app/pages/Auth/reset_password")).default,
       }),
     },
   ],

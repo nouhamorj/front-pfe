@@ -178,7 +178,7 @@ export function AuthProvider({ children }) {
     localStorage.removeItem("authToken");
     
     dispatch({ type: "LOGOUT" });
-    window.location.href = '/login';
+    window.location.href = '/se-connecter';
   };
 
   if (!children) return null;
