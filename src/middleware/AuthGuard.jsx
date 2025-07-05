@@ -6,11 +6,11 @@ const getDefaultRouteForRole = (role) => {
   const normalizedRole = role?.toLowerCase();
   switch(normalizedRole) {
     case 'fournisseur':
-      return '/dashboards/home/expediteur';
+      return '/expediteur/tableau-de-bord';
     case 'chef_agence':
-      return '/dashboards/home/chef-agence'; 
+      return '/agence/tableau-de-bord'; 
     case 'admin':
-      return '/dashboards/home/admin'; 
+      return '/admin/tableau-de-bord'; 
     default:
       return '/unauthorized';
   }

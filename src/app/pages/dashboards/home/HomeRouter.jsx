@@ -25,13 +25,13 @@ const HomeRouter = () => {
   switch (role) {
     case 'admin':
       console.log('HomeRouter - Redirecting to admin dashboard');
-      return <Navigate to="/dashboards/home/admin" replace />;
+      return <Navigate to="/admin/tableau-de-bord" replace />;
     case 'fournisseur':
       console.log('HomeRouter - Redirecting to fournisseur dashboard');
-      return <Navigate to="/dashboards/home/expediteur" replace />;
+      return <Navigate to="/expediteur/tableau-de-bord" replace />;
     case 'chef_agence':
       console.log('HomeRouter - Redirecting to chef_agence dashboard');
-      return <Navigate to="/dashboards/home/agence" replace />;
+      return <Navigate to="/agence/tableau-de-bord" replace />;
     default:
       console.log('HomeRouter - Unknown role, redirecting to unauthorized');
       return <Navigate to="/unauthorized" replace />;

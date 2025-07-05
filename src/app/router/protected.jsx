@@ -13,57 +13,80 @@ const protectedRoutes = {
       children: [
         {
           index: true,
-          element: <Navigate to="/dashboards/home" replace />,
+          lazy: async () => ({
+            Component: (await import('app/pages/dashboards/home/HomeRouter')).default,
+          }),
         },
+        // Routes pour Admin avec préfixe admin/
         {
-          path: 'dashboards',
+          path: 'admin',
+          element: <AuthGuard allowedRoles={['admin']} />,
           children: [
             {
               index: true,
-              element: <Navigate to="/dashboards/home" replace />,
+              element: <Navigate to="/admin/tableau-de-bord" replace />,
             },
             {
-              path: 'home',
+              path: 'tableau-de-bord',
               lazy: async () => ({
-                Component: (await import('app/pages/dashboards/home/HomeRouter')).default,
+                Component: (await import('app/pages/Admin/AdminDashboard')).default,
               }),
             },
+            // Ajoutez d'autres routes admin ici si nécessaire
+            // {
+            //   path: 'users',
+            //   lazy: async () => ({
+            //     Component: (await import('app/pages/Admin/UserManagement')).default,
+            //   }),
+            // },
+          ],
+        },
+        // Routes pour Chef d'agence avec préfixe agence/
+        {
+          path: 'agence',
+          element: <AuthGuard allowedRoles={['chef_agence']} />,
+          children: [
             {
-              path: 'home/admin',
-              element: <AuthGuard allowedRoles={['admin']} />,
-              children: [
-                {
-                  index: true,
-                  lazy: async () => ({
-                    Component: (await import('app/pages/dashboards/home/AdminDashboard')).default,
-                  }),
-                },
-              ],
+              index: true,
+              element: <Navigate to="/agence/tableau-de-bord" replace />,
             },
             {
-              path: 'home/agence',
-              element: <AuthGuard allowedRoles={['chef_agence']} />,
-              children: [
-                {
-                  index: true,
-                  lazy: async () => ({
-                    Component: (await import('app/pages/dashboards/home/AgenceDashboard')).default,
-                  }),
-                },
-              ],
+              path: 'tableau-de-bord',
+              lazy: async () => ({
+                Component: (await import('app/pages/Agence/AgenceDashboard')).default,
+              }),
+            },
+            // Ajoutez d'autres routes agence ici si nécessaire
+            // {
+            //   path: 'deliveries',
+            //   lazy: async () => ({
+            //     Component: (await import('app/pages/Agence/DeliveryManagement')).default,
+            //   }),
+            // },
+          ],
+        },
+        // Routes pour Expéditeur avec préfixe expediteur/
+        {
+          path: 'expediteur',
+          element: <AuthGuard allowedRoles={['fournisseur']} />,
+          children: [
+            {
+              index: true,
+              element: <Navigate to="/expediteur/tableau-de-bord" replace />,
             },
             {
-              path: 'home/expediteur',
-              element: <AuthGuard allowedRoles={['fournisseur']} />,
-              children: [
-                {
-                  index: true,
-                  lazy: async () => ({
-                    Component: (await import('app/pages/dashboards/home/ExpediteurDashboard')).default,
-                  }),
-                },
-              ],
+              path: 'tableau-de-bord',
+              lazy: async () => ({
+                Component: (await import('app/pages/Expediteur/ExpediteurDashboard')).default,
+              }),
             },
+            // Ajoutez d'autres routes expéditeur ici si nécessaire
+            // {
+            //   path: 'orders',
+            //   lazy: async () => ({
+            //     Component: (await import('app/pages/Expediteur/OrderManagement')).default,
+            //   }),
+            // },
           ],
         },
       ],

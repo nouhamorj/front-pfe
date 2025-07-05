@@ -70,13 +70,13 @@ const getDefaultRouteForRole = (role) => {
   const normalizedRole = role?.toLowerCase();
   switch(normalizedRole) {
     case 'fournisseur':
-      return '/dashboards/home'; // Ou la vraie route qui existe pour fournisseur
+      return '/expediteur/tableau-de-bord';
     case 'chef_agence':
-      return '/dashboards/home'; // Ou la vraie route qui existe pour chef_agence
+      return '/agence/tableau-de-bord';
     case 'admin':
-      return '/dashboards/home/admin'; // Ajustez selon votre structure
+      return '/admin/tableau-de-bord';
     default:
-      return '/dashboard';
+      return '/';
   }
 };
 
