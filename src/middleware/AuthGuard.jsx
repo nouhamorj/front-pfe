@@ -23,24 +23,16 @@ export default function AuthGuard({ allowedRoles }) {
 
   const userRole = user?.role?.toLowerCase();
 
-  console.log('AuthGuard - isInitialized:', isInitialized);
-  console.log('AuthGuard - isAuthenticated:', isAuthenticated);
-  console.log('AuthGuard - user:', user);
-  console.log('AuthGuard - userRole:', userRole);
-  console.log('AuthGuard - allowedRoles:', allowedRoles);
-  console.log('AuthGuard - location.pathname:', location.pathname);
-
   // En cours d'initialisation
   if (!isInitialized || (isAuthenticated && !user)) {
     return <div>Chargement...</div>;
   }
 
-  // Utilisateur authentifié mais rôle pas encore chargé
   if (!isInitialized || (isAuthenticated && !userRole)) {
     return <div>Chargement des autorisations...</div>;
   }
 
-  // Pas authentifié du tout
+
   if (!isAuthenticated || !user) {
     return (
       <Navigate
@@ -63,7 +55,5 @@ export default function AuthGuard({ allowedRoles }) {
 
     return <Navigate to={defaultRoute} replace />;
   }
-
-  // ✅ Tout est ok
   return <>{outlet}</>;
 }

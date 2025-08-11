@@ -648,6 +648,23 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@googlemaps/js-api-loader@npm:1.16.8":
+  version: 1.16.8
+  resolution: "@googlemaps/js-api-loader@npm:1.16.8"
+  checksum: 10c0/c4159411f784253ef36c8a674756716637fcf50f7bf0600e7a5298c20229f3962f5fb73d8011dc478b60baea369c0d730db6ad13baa4e43cfc5444379a1ee75d
+  languageName: node
+  linkType: hard
+
+"@googlemaps/markerclusterer@npm:2.5.3":
+  version: 2.5.3
+  resolution: "@googlemaps/markerclusterer@npm:2.5.3"
+  dependencies:
+    fast-deep-equal: "npm:^3.1.3"
+    supercluster: "npm:^8.0.1"
+  checksum: 10c0/29954c8ad97f7cf0383dc5d4e1d04de4844cc527865cb3a75b73672f29e3087eb0a8a2a594fa75d968f6c40bc90f44ffbf0b1a478e7353eb81361aeff61c2602
+  languageName: node
+  linkType: hard
+
 "@headlessui/react@npm:^2.2.0":
   version: 2.2.1
   resolution: "@headlessui/react@npm:2.2.1"
@@ -892,6 +909,48 @@ __metadata:
     react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
     react-dom: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
   checksum: 10c0/69fc00d5dbd0fae9349a06cc3bcf327aa1edcb9049a491d0949b4de30c1b7669edc7150cc6885aa362af74a21b68c400b2965c3e117871264c47c379f4a98695
+  languageName: node
+  linkType: hard
+
+"@react-google-maps/api@npm:^2.20.7":
+  version: 2.20.7
+  resolution: "@react-google-maps/api@npm:2.20.7"
+  dependencies:
+    "@googlemaps/js-api-loader": "npm:1.16.8"
+    "@googlemaps/markerclusterer": "npm:2.5.3"
+    "@react-google-maps/infobox": "npm:2.20.0"
+    "@react-google-maps/marker-clusterer": "npm:2.20.0"
+    "@types/google.maps": "npm:3.58.1"
+    invariant: "npm:2.2.4"
+  peerDependencies:
+    react: ^16.8 || ^17 || ^18 || ^19
+    react-dom: ^16.8 || ^17 || ^18 || ^19
+  checksum: 10c0/178397afa8a1b9d2d7f9bbc1e51262931e2bc0ba61602ac272c6e574aaef5faa1b1d1cb9670ee4b549a5b5d98ffdabc5124bd936a0ec52add18910ec20b42817
+  languageName: node
+  linkType: hard
+
+"@react-google-maps/infobox@npm:2.20.0":
+  version: 2.20.0
+  resolution: "@react-google-maps/infobox@npm:2.20.0"
+  checksum: 10c0/a759b71a4be92481e971561cffdb191ffe4ddbf3b697915b5d47cc9c686fc237099528737cc9958c97b84ed425941e3bad7735714a67ce3b23a9d80a0271afcd
+  languageName: node
+  linkType: hard
+
+"@react-google-maps/marker-clusterer@npm:2.20.0":
+  version: 2.20.0
+  resolution: "@react-google-maps/marker-clusterer@npm:2.20.0"
+  checksum: 10c0/ef92127bbab855ef0e78dcf43a0a5af4aa42dabb56d928e6e6eceb425d9bd51419a49e026445536292f1abee92fb9849db3cc45761bfa2e68963ad6f638c16e6
+  languageName: node
+  linkType: hard
+
+"@react-leaflet/core@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "@react-leaflet/core@npm:3.0.0"
+  peerDependencies:
+    leaflet: ^1.9.0
+    react: ^19.0.0
+    react-dom: ^19.0.0
+  checksum: 10c0/1e20f92ea99d378121d7ba57b9571ca3a67a86247729d8cd5726ded26105fcbffbbdf727da34b2ad5976438979819a38c93b94389313abb3ff80ca81632609a6
   languageName: node
   linkType: hard
 
@@ -1600,6 +1659,13 @@ __metadata:
   version: 1.0.7
   resolution: "@types/estree@npm:1.0.7"
   checksum: 10c0/be815254316882f7c40847336cd484c3bc1c3e34f710d197160d455dc9d6d050ffbf4c3bc76585dba86f737f020ab20bdb137ebe0e9116b0c86c7c0342221b8c
+  languageName: node
+  linkType: hard
+
+"@types/google.maps@npm:3.58.1":
+  version: 3.58.1
+  resolution: "@types/google.maps@npm:3.58.1"
+  checksum: 10c0/0247c61d2aeb216d04ab9392602ef41d58328c6336ed4e9a4e9e69834002e82c116a34def2bf4ceb31c4292f14899815058da4bb8d803147295c6b47c1162621
   languageName: node
   linkType: hard
 
@@ -3910,6 +3976,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"invariant@npm:2.2.4":
+  version: 2.2.4
+  resolution: "invariant@npm:2.2.4"
+  dependencies:
+    loose-envify: "npm:^1.0.0"
+  checksum: 10c0/5af133a917c0bcf65e84e7f23e779e7abc1cd49cb7fdc62d00d1de74b0d8c1b5ee74ac7766099fb3be1b05b26dfc67bab76a17030d2fe7ea2eef867434362dfc
+  languageName: node
+  linkType: hard
+
 "ip-address@npm:^9.0.5":
   version: 9.0.5
   resolution: "ip-address@npm:9.0.5"
@@ -4336,6 +4411,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"jsbarcode@npm:^3.12.1":
+  version: 3.12.1
+  resolution: "jsbarcode@npm:3.12.1"
+  checksum: 10c0/0bd3f276dcce0afab9a995e4c52da0e755a7a6bb8eaa85510886fcb9eb80f4608df26fc2c0114ba9f324d9003076e3049bf49b2c0534e9e7677ce46ec939e4e9
+  languageName: node
+  linkType: hard
+
 "jsbn@npm:1.1.0":
   version: 1.1.0
   resolution: "jsbn@npm:1.1.0"
@@ -4419,6 +4501,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"kdbush@npm:^4.0.2":
+  version: 4.0.2
+  resolution: "kdbush@npm:4.0.2"
+  checksum: 10c0/d50183b299c57e2573114e902ab47aed7494be3ca41b66d456779ecc3b2f153f491de341f9609965414784f728894f9a9001152eb9f3a40cd3755521c06a45a3
+  languageName: node
+  linkType: hard
+
 "keyv@npm:^4.5.4":
   version: 4.5.4
   resolution: "keyv@npm:4.5.4"
@@ -4441,6 +4530,13 @@ __metadata:
   dependencies:
     language-subtag-registry: "npm:^0.3.20"
   checksum: 10c0/9ab911213c4bd8bd583c850201c17794e52cb0660d1ab6e32558aadc8324abebf6844e46f92b80a5d600d0fbba7eface2c207bfaf270a1c7fd539e4c3a880bff
+  languageName: node
+  linkType: hard
+
+"leaflet@npm:^1.9.4":
+  version: 1.9.4
+  resolution: "leaflet@npm:1.9.4"
+  checksum: 10c0/f639441dbb7eb9ae3fcd29ffd7d3508f6c6106892441634b0232fafb9ffb1588b05a8244ec7085de2c98b5ed703894df246898477836cfd0ce5b96d4717b5ca1
   languageName: node
   linkType: hard
 
@@ -4676,7 +4772,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"loose-envify@npm:^1.4.0":
+"loose-envify@npm:^1.0.0, loose-envify@npm:^1.4.0":
   version: 1.4.0
   resolution: "loose-envify@npm:1.4.0"
   dependencies:
@@ -6024,6 +6120,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-leaflet@npm:^5.0.0":
+  version: 5.0.0
+  resolution: "react-leaflet@npm:5.0.0"
+  dependencies:
+    "@react-leaflet/core": "npm:^3.0.0"
+  peerDependencies:
+    leaflet: ^1.9.0
+    react: ^19.0.0
+    react-dom: ^19.0.0
+  checksum: 10c0/f0b6fb797cc2d81bc8cbb54e0cb32aefa689d35ca5f52d203ce3c5a1d14668e51244f10844bd2c88d5cb4aca5eb05bc280794e6d1652727ff9da2358e89d1b86
+  languageName: node
+  linkType: hard
+
 "react-markdown@npm:^10.1.0":
   version: 10.1.0
   resolution: "react-markdown@npm:10.1.0"
@@ -6116,12 +6225,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-to-print@npm:^3.0.5":
-  version: 3.0.6
-  resolution: "react-to-print@npm:3.0.6"
+"react-to-print@npm:^3.1.1":
+  version: 3.1.1
+  resolution: "react-to-print@npm:3.1.1"
   peerDependencies:
     react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ~19
-  checksum: 10c0/38f5b16070bf09cae0a719b1bfe5d896529067b74660655084d4e9f3307641136b5277b0cb5c66f229aebd6e2efc247e9aed7052a7fcee9209773820ec321dfc
+  checksum: 10c0/07ce955f35bb9cef1c856d94eda3b5a9f82759367c76e5c6b4139c76012fb3c66ad866dd37bbc2eb714a98c096ef7077a553317722ddb72ebbfb95449337110e
   languageName: node
   linkType: hard
 
@@ -6902,6 +7011,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"supercluster@npm:^8.0.1":
+  version: 8.0.1
+  resolution: "supercluster@npm:8.0.1"
+  dependencies:
+    kdbush: "npm:^4.0.2"
+  checksum: 10c0/79121e6dbff67b3036ea6651f3baddb942478830ba3ecbc27455715ab5bd269de8381dc04618c0c15963346ea2ed0f81cd5f767c2978a63e2841807c73445d57
+  languageName: node
+  linkType: hard
+
 "supports-color@npm:^7.1.0":
   version: 7.2.0
   resolution: "supports-color@npm:7.2.0"
@@ -6953,6 +7071,7 @@ __metadata:
     "@headlessui/react": "npm:^2.2.0"
     "@heroicons/react": "npm:^2.2.0"
     "@hookform/resolvers": "npm:^4.1.3"
+    "@react-google-maps/api": "npm:^2.20.7"
     "@tailwindcss/postcss": "npm:^4.0.16"
     "@tailwindcss/vite": "npm:^4.0.15"
     "@tanem/react-nprogress": "npm:^5.0.55"
@@ -6982,7 +7101,9 @@ __metadata:
     html-react-parser: "npm:^5.2.2"
     i18next: "npm:^24.2.3"
     i18next-browser-languagedetector: "npm:^8.0.4"
+    jsbarcode: "npm:^3.12.1"
     jwt-decode: "npm:^4.0.0"
+    leaflet: "npm:^1.9.4"
     lint-staged: "npm:^15.5.0"
     lodash: "npm:^4.17.21"
     postcss: "npm:^8.5.3"
@@ -7003,12 +7124,13 @@ __metadata:
     react-hotkeys-hook: "npm:^4.6.1"
     react-i18next: "npm:^15.4.1"
     react-icons: "npm:^5.5.0"
+    react-leaflet: "npm:^5.0.0"
     react-markdown: "npm:^10.1.0"
     react-router: "npm:^7.4.0"
     react-syntax-highlighter: "npm:^15.6.1"
     react-textarea-autosize: "npm:^8.5.8"
     react-timer-hook: "npm:^4.0.5"
-    react-to-print: "npm:^3.0.5"
+    react-to-print: "npm:^3.1.1"
     react-tooltip: "npm:^5.28.0"
     simplebar-react: "npm:^3.3.0"
     sonner: "npm:^2.0.1"

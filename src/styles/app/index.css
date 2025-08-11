@@ -6,6 +6,16 @@
 @import "./vendors/sonner.css";
 @import "./vendors/apexchart.css";
 
+@import 'leaflet/dist/leaflet.css';
+
+.leaflet-container {
+  height: 300px;
+  z-index: 1;
+  border-radius: 0.75rem;
+  border: 1px solid #d1d5db;
+}
+
+
 /* Forms Styles */
 @import "./forms/input.css";
 @import "./forms/select.css";

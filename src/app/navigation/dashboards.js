@@ -1,27 +1,37 @@
-import { HomeIcon } from '@heroicons/react/24/outline';
 import DashboardsIcon from 'assets/dualicons/dashboards.svg?react'
 import { NAV_TYPE_ROOT, NAV_TYPE_ITEM } from 'constants/app.constant'
 
-const ROOT_DASHBOARDS = '/dashboards'
-
-const path = (root, item) => `${root}${item}`;
 
 export const dashboards = {
     id: 'dashboards',
     type: NAV_TYPE_ROOT,
-    path: '/dashboards',
-    title: 'Tableau de bord',
-    transKey: 'nav.dashboards.dashboards',
+    title: 'ShippingLog',
     Icon: DashboardsIcon,
+    allowedRoles: ['admin', 'chef_agence', 'fournisseur'],
     childs: [
         {
-            id: 'dashboards.home',
-            path: path(ROOT_DASHBOARDS, '/home'),
+            id: 'bord',
+            path: '/expediteur/tableau-de-bord',
             type: NAV_TYPE_ITEM,
-            title: 'Accueil',
-            transKey: 'nav.dashboards.home',
-            Icon: HomeIcon,
+            title: 'Tableau de bord',
+            allowedRoles: ['fournisseur']
         },
+        
+        {
+            id: 'recherche',
+            path: '/expediteur/recherche-colis',
+            type: NAV_TYPE_ITEM,
+            title: 'Rechercher Un Colis',
+            allowedRoles: ['fournisseur']
+        },
+        {
+            id: 'temps-reel',
+            path: '/expediteur/temps-réel',
+            type: NAV_TYPE_ITEM,
+            title: 'Temps Réel',
+            allowedRoles: ['fournisseur']
+        },
+
 
     ]
 }

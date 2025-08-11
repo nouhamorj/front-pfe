@@ -1,4 +1,4 @@
-// src/app/router/protected.jsx
+
 import { Navigate } from 'react-router';
 import { AppLayout } from 'app/layouts/AppLayout';
 import { DynamicLayout } from 'app/layouts/DynamicLayout';
@@ -6,7 +6,7 @@ import AuthGuard from 'middleware/AuthGuard';
 
 const protectedRoutes = {
   id: 'protected',
-  Component: AuthGuard, // Protège toutes les routes avec AuthGuard sans rôles spécifiques
+  Component: AuthGuard, 
   children: [
     {
       Component: DynamicLayout,
@@ -32,15 +32,77 @@ const protectedRoutes = {
                 Component: (await import('app/pages/Admin/AdminDashboard')).default,
               }),
             },
-            // Ajoutez d'autres routes admin ici si nécessaire
-            // {
-            //   path: 'users',
-            //   lazy: async () => ({
-            //     Component: (await import('app/pages/Admin/UserManagement')).default,
-            //   }),
-            // },
+            {
+            path: 'liste-agences',
+              lazy: async () => ({
+                 Component: (await import('app/pages/Admin/ListeAgence')).default,
+               }),
+            },
+            {
+            path: 'liste-livreurs',
+              lazy: async () => ({
+                 Component: (await import('app/pages/Admin/ListeLivreur')).default,
+               }),
+            },
+            {
+            path: 'liste-expediteurs',
+              lazy: async () => ({
+                 Component: (await import('app/pages/Admin/ListeExpediteur')).default,
+               }),
+            },
+            {
+              path : 'ajouter-expediteur',
+              lazy: async () => ({
+                 Component: (await import('app/pages/Admin/AddExp')).default,
+               }),
+            },
+            {
+              path : 'modifier-expediteur/:id',
+              lazy: async () => ({
+                 Component: (await import('app/pages/Admin/UpdateExp')).default,
+               }),
+            },
+            {
+              path : 'ajouter-livreur',
+              lazy: async () => ({
+                 Component: (await import('app/pages/Admin/AddLivreur')).default,
+               }),
+            },
+            {
+              path : 'modifier-livreur/:id',
+              lazy: async () => ({
+                 Component: (await import('app/pages/Admin/UpdateLivreur')).default,
+               }),
+            },
+            {
+              path : 'ajouter-agence',
+              lazy: async () => ({
+                 Component: (await import('app/pages/Admin/AddAgence')).default,
+               }),
+            },
+            {
+              path : 'liste-chauffeurs',
+              lazy: async () => ({
+                 Component: (await import('app/pages/Admin/ListeChauffeurs')).default,
+               }),
+            },
+            {
+              path : 'ajouter-chauffeur',
+              lazy: async () => ({
+                 Component: (await import('app/pages/Admin/AddChauffeur')).default,
+               }),
+            },
+            {
+              path : 'modifier-chauffeur/:id',
+              lazy: async () => ({
+                 Component: (await import('app/pages/Admin/EditChauufeur')).default,
+               }),
+            },
           ],
         },
+
+
+
         // Routes pour Chef d'agence avec préfixe agence/
         {
           path: 'agence',
@@ -56,15 +118,114 @@ const protectedRoutes = {
                 Component: (await import('app/pages/Agence/AgenceDashboard')).default,
               }),
             },
-            // Ajoutez d'autres routes agence ici si nécessaire
-            // {
-            //   path: 'deliveries',
-            //   lazy: async () => ({
-            //     Component: (await import('app/pages/Agence/DeliveryManagement')).default,
-            //   }),
-            // },
+            {
+              path: 'liste-expediteurs',
+              lazy: async () => ({
+                Component: (await import('app/pages/Agence/ListeExpediteur')).default,
+              }),
+            },
+            {
+              path: 'ajouter-expediteur',
+              lazy: async () => ({
+                Component: (await import('app/pages/Agence/AddExp')).default,
+              }),
+            },
+            {
+              path: 'modifier-expediteur/:id',
+              lazy: async () => ({
+                Component: (await import('app/pages/Agence/UpdateExp')).default,
+              }),
+            },
+            {
+              path: 'liste-livreurs',
+              lazy: async () => ({
+                Component: (await import('app/pages/Agence/ListeLivreur')).default,
+              }),
+            },
+            {
+              path: 'ajouter-livreur',
+              lazy: async () => ({
+                Component: (await import('app/pages/Agence/AddLivreur')).default,
+              }),
+            },
+            {
+              path: 'modifier-livreur/:id',
+              lazy: async () => ({
+                Component: (await import('app/pages/Agence/UpdateLivreur')).default,
+              }),
+            },
+            {
+              path: 'ajouter-console-pickup',
+              lazy: async () => ({
+                Component: (await import('app/pages/Agence/AddConsolePickup')).default,
+              }),
+            },
+            {
+              path: 'liste-console-pickup',
+              lazy: async () => ({
+                Component: (await import('app/pages/Agence/consolePickupList')).default,
+              }),
+            },
+            {
+              path: 'detail-console-pickup/:id_console',
+              lazy: async () => ({
+                Component: (await import('app/pages/Agence/detailConsolePickup')).default,
+              }),
+            },
+            {
+              path: 'accepter-console-pickup',
+              lazy: async () => ({
+                Component: (await import('app/pages/Agence/AcceptConsolePickup')).default,
+              }),
+            },
+            {
+              path: 'valider-console-pickup/:id',
+              lazy: async () => ({
+                Component: (await import('app/pages/Agence/ValiderConsolePickup')).default,
+              }),
+            },
+            {
+              path: 'accepter-colis',
+              lazy: async () => ({
+                Component: (await import('app/pages/Agence/AccepterColis')).default,
+              }),
+            },
+            {
+              path: 'ajouter-console-retour',
+              lazy: async () => ({
+                Component: (await import('app/pages/Agence/AddConsoleRetour')).default,
+              }),
+            },
+            {
+              path: 'liste-console-retour',
+              lazy: async () => ({
+                Component: (await import('app/pages/Agence/ConsoleRetourList')).default,
+              }),
+            },
+            {
+              path: 'detail-console-retour/:id_console',
+              lazy: async () => ({
+                Component: (await import('app/pages/Agence/DetailConsoleRetour')).default,
+              }),
+            },
+            {
+              path: 'accepter-console-retour',
+              lazy: async () => ({
+                Component: (await import('app/pages/Agence/AcceptConsoleRetour')).default,
+              }),
+            },
+            {
+              path: 'valider-console-retour/:id',
+              lazy: async () => ({
+                Component: (await import('app/pages/Agence/ValiderConsoleRetour')).default,
+              }),
+            },
+          
+          
           ],
         },
+
+
         // Routes pour Expéditeur avec préfixe expediteur/
         {
           path: 'expediteur',
@@ -80,13 +241,42 @@ const protectedRoutes = {
                 Component: (await import('app/pages/Expediteur/ExpediteurDashboard')).default,
               }),
             },
-            // Ajoutez d'autres routes expéditeur ici si nécessaire
-            // {
-            //   path: 'orders',
-            //   lazy: async () => ({
-            //     Component: (await import('app/pages/Expediteur/OrderManagement')).default,
-            //   }),
-            // },
+            {
+              path: 'ajouter-pickUp',
+              lazy: async () => ({
+                Component: (await import('app/pages/Expediteur/AddCmd')).default,
+              }),
+            },
+            {
+              path: 'modifier-commande/:id',
+              lazy: async () => ({
+                Component: (await import('app/pages/Expediteur/EditCmd')).default,
+              }),
+            },
+            {
+              path: 'colis-en-attente',
+              lazy: async () => ({
+                Component: (await import('app/pages/Expediteur/ColisAttente')).default,
+              }),
+            },
+            {
+              path: 'colis-en-attente-imprimés',
+              lazy: async () => ({
+                Component: (await import('app/pages/Expediteur/ColisAttenteImprimes')).default,
+              }),
+            },
+            {
+              path: 'print-bordereau/:id_manifeste',
+              lazy: async () => ({
+                Component: (await import('app/pages/Expediteur/PrintBorderaux')).default,
+              }),
+            },
+            {
+              path: 'print-all-bordereaux',
+              lazy: async () => ({
+                Component: (await import('app/pages/Expediteur/PrintAllBorderaux')).default,
+              }),
+            },
           ],
         },
       ],

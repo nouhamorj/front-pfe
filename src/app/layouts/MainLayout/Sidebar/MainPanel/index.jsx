@@ -4,7 +4,7 @@ import { Link } from "react-router";
 import clsx from "clsx";
 
 // Local Imports
-import Logo from "assets/appLogo.svg?react";
+import Logo from "assets/sidebarLogo.svg?react";
 import { Menu } from "./Menu";
 import { Item } from "./Menu/Item";
 import { Profile } from "../../Profile";

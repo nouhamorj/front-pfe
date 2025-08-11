@@ -24,10 +24,10 @@ const defaultMessages = {
   pending: {
     Icon: ExclamationTriangleIcon,
     iconClassName: "text-warning",
-    title: "Are you sure?",
+    title: "Confirmation de suppression",
     description:
       "Are you sure you want to delete this record? Once deleted, it cannot be restored.",
-    actionText: "Delete",
+    actionText: "Supprimer",
   },
   success: {
     Icon: AnimatedTick,
@@ -145,7 +145,7 @@ function Confirm({ onOk, state, messages, confirmLoading, onClose, focusRef }) {
               variant="outlined"
               className="h-9 min-w-[7rem]"
             >
-              Cancel
+              Annler
             </Button>
 
             {state === "pending" && (

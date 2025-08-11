@@ -95,7 +95,7 @@ export function AuthProvider({ children }) {
         if (authToken && isTokenValid(authToken) && storedUser) {
           setSession(authToken);
           const user = JSON.parse(storedUser);
-          console.log("Parsed user:", user);
+          //console.log("Parsed user:", user);
           console.log("User role:", user?.role);
 
           dispatch({
@@ -140,8 +140,8 @@ export function AuthProvider({ children }) {
       });
 
       const { token, user } = response.data;
-      console.log("API response:", response.data);
-      console.log("User role from API:", user?.role);
+      //console.log("API response:", response.data);
+      //console.log("User role from API:", user?.role);
 
       if (!isString(token) || !isObject(user)) {
         throw new Error("Format de réponse invalide");
@@ -150,6 +150,7 @@ export function AuthProvider({ children }) {
       setSession(token);
       localStorage.setItem("authUser", JSON.stringify(user));
       localStorage.setItem("authToken", token);
+      
 
       dispatch({
         type: "LOGIN_SUCCESS",
