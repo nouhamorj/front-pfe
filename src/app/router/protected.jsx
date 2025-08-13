@@ -220,6 +220,13 @@ const protectedRoutes = {
                 Component: (await import('app/pages/Agence/ValiderConsoleRetour')).default,
               }),
             },
+            {
+              path: 'modifier-colis',
+              lazy: async () => ({
+                Component: (await import('app/pages/Agence/ModifCmd')).default,
+              }),
+            },
+          
           
           
           ],

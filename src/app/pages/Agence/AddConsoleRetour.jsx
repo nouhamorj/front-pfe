@@ -139,9 +139,9 @@ export default function ConsolePickup() {
   return (
     <Page title="Console Pickup">
       <div className="w-full mx-auto bg-white dark:bg-dark-800 p-6 rounded-xl shadow">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+        <h5 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
           Créer un Console Retour
-        </h1>
+        </h5>
         <p className="text-gray-600 dark:text-gray-400 mb-6">
           Associez plusieurs colis à un chauffeur pour un transfert inter-agence.
         </p>

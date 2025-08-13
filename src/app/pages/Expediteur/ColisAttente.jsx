@@ -58,9 +58,9 @@ export default function ListeColisFournisseur() {
   const [error, setError] = useState(null);
   const [submitStatus, setSubmitStatus] = useState(null);
   const deferredGlobalFilter = useDeferredValue(globalFilter);
-  const navigate = useNavigate(); // ✅ Bien placé ici
-
-  // ✅ Définition des colonnes après les hooks
+  const navigate = useNavigate(); // 
+  
+  // Définition des colonnes après les hooks
   const columnHelper = createColumnHelper();
 
   const columns = [
@@ -113,13 +113,12 @@ export default function ListeColisFournisseur() {
       header: "Prix",
       cell: ({ row }) => row.original.prix || "-",
     }),
-    // 🔹 Colonne Actions (Modifier + Imprimer) – Style uniforme
     columnHelper.display({
       id: "actions",
       header: "Actions",
       cell: ({ row }) => (
         <div className="flex items-center space-x-2">
-          {/* 🔧 Bouton Modifier */}
+          {/* Bouton Modifier */}
           <Button
             onClick={() => navigate(`/expediteur/modifier-commande/${row.original.id}`)}
             color="info"
@@ -131,7 +130,7 @@ export default function ListeColisFournisseur() {
             {/*Modifier*/}
           </Button>
 
-          {/* 🖨️ Bouton Imprimer – Même style */}
+          {/* Bouton Imprimer – Même style */}
           <Button style={{backgroundColor:"#FDC633"}}
             onClick={async () => {
               const authToken = localStorage.getItem("authToken") || sessionStorage.getItem("authToken");

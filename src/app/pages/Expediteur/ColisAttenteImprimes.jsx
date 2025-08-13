@@ -101,12 +101,12 @@ const columns = [
     header: "Prix",
     cell: ({ row }) => row.original.prix || "-",
   }),
-  // 🔹 Colonne Impression
+  // Colonne Impression
   columnHelper.display({
     id: "impression",
     header: "Impression",
     cell: ({ row }) => (
-      <button
+      <button style={{backgroundColor:"#FDC633"}}
         onClick={() => {
           window.open(`/expediteur/print-bordereau/${row.original.id}`, '_blank');
         }}

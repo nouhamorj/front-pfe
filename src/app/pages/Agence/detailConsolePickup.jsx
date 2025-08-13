@@ -190,9 +190,9 @@ const InterDepotDetail = ({ consoleId: propConsoleId }) => {
       <div className="max-w-full mx-auto">
         {/* En-tête avec titre centré et logo à droite */}
         <div className="text-center mb-4">
-          <h2 className="text-2xl font-bold border-2 border-gray-300 py-4 px-8 inline-block">
+          <h5 className="text-2xl font-bold border-2 border-gray-300 py-4 px-8 inline-block">
             Bon de sortie N° {consoleId}
-          </h2>
+          </h5>
         </div>
         {/* Informations générales dans deux colonnes */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">

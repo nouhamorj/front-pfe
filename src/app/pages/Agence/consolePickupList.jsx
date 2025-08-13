@@ -5,7 +5,7 @@ import { useNavigate } from "react-router";
 import { Button, Badge, Table, THead, TBody, Th, Tr, Td } from "components/ui";
 import { DatePicker } from "components/shared/form/Datepicker";
 import { MagnifyingGlassIcon, ArrowPathIcon } from "@heroicons/react/24/outline";
-import { toast } from "sonner";
+//import { toast } from "sonner";
 import {
   flexRender,
   getCoreRowModel,
@@ -129,7 +129,7 @@ export default function ConsolePickupList() {
 
   const fetchConsoles = async () => {
     if (!agenceId) {
-      toast.error("Agence non trouvée.");
+      //toast.error("Agence non trouvée.");
       setLoading(false);
       return;
     }
@@ -166,7 +166,7 @@ export default function ConsolePickupList() {
       setHasSearched(true);
     } catch (err) {
       console.error("Erreur:", err);
-      toast.error(err.message || "Impossible de charger les données.");
+      //toast.error(err.message || "Impossible de charger les données.");
       setConsoles([]);
       setHasSearched(true);
     } finally {

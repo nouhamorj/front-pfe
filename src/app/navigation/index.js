@@ -1,25 +1,35 @@
+// app/navigation/index.js
+import { consolePickup } from "./consolePickup";
+import { consoleRetour } from "./consoleRetour";
 import { dashboards } from "./dashboards";
 import { gestion } from "./gestionAdmin";
+import { gestion_agence } from "./gestionAgence";
 import { pickup } from "./pickup";
-import { runsheet} from "./runsheet";
+import { runsheet } from "./runsheet";
 
-// Navigation complète (les rôles sont définis dans chaque module)
-const allNavigationModules = [
+export const navigation = [
     dashboards,
     gestion,
+    gestion_agence,
     pickup,
     runsheet,
+    consolePickup,
+    consoleRetour
+
 ];
 
-// Export de la navigation complète (pour compatibilité)
-export const navigation = allNavigationModules;
-
-// Fonction pour obtenir la navigation filtrée par rôle
 export const getNavigationByRole = (userRole) => {
-    return allNavigationModules.filter(module => 
-        module.allowedRoles && module.allowedRoles.includes(userRole)
-    );
+    return navigation
+        .filter(item => item.allowedRoles?.includes(userRole))
+        .map(item => {
+            if (item.childs && Array.isArray(item.childs)) {
+                return {
+                    ...item,
+                    childs: item.childs.filter(child => child.allowedRoles?.includes(userRole))
+                };
+            }
+            return item;
+        });
 };
 
-// Export original pour compatibilité
 export { baseNavigation } from './baseNavigation';

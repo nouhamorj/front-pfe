@@ -72,9 +72,9 @@ export default function AccepterInterDepot() {
     <Page title="Accepter Inter Dépôt">
       <div className="transition-content w-full px-(--margin-x) pt-5 lg:pt-6">
         <div className="min-w-0">
-          <h2 className="truncate text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50">
+          <h5 className="truncate text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50">
             Consoles en attente
-          </h2>
+          </h5>
           <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
             Cliquez sur une agence pour valider les colis reçus
           </p>
@@ -99,7 +99,7 @@ export default function AccepterInterDepot() {
             agences.map((agence) => (
               <div
                 key={agence.id}
-                onClick={() => navigate(`/agence/valider-console-pickup/${agence.id}`)}
+                onClick={() => navigate(`/agence/valider-console-retour/${agence.id}`)}
                 className="rounded-lg p-4 border border-gray-300 dark:bg-dark-700 cursor-pointer transition-all duration-200 transform hover:scale-[1.01] hover:shadow-md">
                 {/* Nombre de colis */}
                 <div className="flex justify-between items-start mb-3">

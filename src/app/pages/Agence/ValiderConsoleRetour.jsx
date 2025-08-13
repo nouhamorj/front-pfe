@@ -1,4 +1,4 @@
-// ValiderConsolePickup.jsx
+// ValiderConsoleRetour.jsx
 import { useState, useEffect } from "react";
 import { useAuthContext } from "app/contexts/auth/context";
 import { useParams } from "react-router";
@@ -9,7 +9,7 @@ import { toast } from "sonner";
 import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
 import { Table, THead, TBody, Th, Tr, Td } from "components/ui";
 
-export default function ValiderConsolePickup() {
+export default function ValiderConsoleRetour() {
     const { user } = useAuthContext();
     const { id: agenceSourceId } = useParams(); // ID de l'agence source
 
@@ -30,7 +30,7 @@ export default function ValiderConsolePickup() {
             try {
                 // 1. Récupérer les id_console en attente
                 const resConsoles = await fetch(
-                    `http://localhost:3000/api/console-pickup/pending-consoles?agence_dest=${agenceDestId}&agence_source=${agenceSourceId}`,
+                    `http://localhost:3000/api/console-retour/pending-consoles?agence_dest=${agenceDestId}&agence_source=${agenceSourceId}`,
                     { headers: { Authorization: `Bearer ${token}` } }
                 );
 
@@ -128,16 +128,15 @@ export default function ValiderConsolePickup() {
         setValidating(true);
 
         try {
-            const res = await fetch("http://localhost:3000/api/console-pickup/valider", {
+            const res = await fetch("http://localhost:3000/api/console-retour/validate", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${token}`,
                 },
                 body: JSON.stringify({
-                    agence_dest: agenceDestId,
-                    agence_source: agenceSourceId,
-                    codes: uniqueCodes,
+                    agence_dest: agenceDestId,        
+                    listCode: uniqueCodes.join('\n') 
                 }),
             });
 
@@ -167,12 +166,10 @@ export default function ValiderConsolePickup() {
     };
 
     return (
-        <Page title="Valider Console Pickup">
+        <Page title="Valider Console retour">
             <div className="transition-content w-full px-(--margin-x) pt-5 lg:pt-6">
                 <div className="flex items-center gap-3 mb-6">
-                    <h2 className="text-xl font-semibold text-gray-800 dark:text-white">
-                        Valider les colis
-                    </h2>
+                    <h5 className="text-lg font-semibold text-gray-800 mb-1">Valider les colis</h5>
                 </div>
 
                 {/* Saisie codes */}

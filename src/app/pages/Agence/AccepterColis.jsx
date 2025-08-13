@@ -94,9 +94,9 @@ export default function AccepterAuMagasin() {
     <Page title="Accepter au magasin">
       <div className="transition-content w-full px-(--margin-x) pt-5 lg:pt-6">
         <div className="flex items-center gap-3 mb-6">
-          <h2 className="text-xl font-semibold text-gray-800 dark:text-white">
+          <h5 className="text-xl font-semibold text-gray-800 dark:text-white">
             Accepter au magasin
-          </h2>
+          </h5>
         </div>
 
         <Card className="max-w-8xl mx-auto">
