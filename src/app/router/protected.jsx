@@ -284,6 +284,12 @@ const protectedRoutes = {
                 Component: (await import('app/pages/Expediteur/PrintAllBorderaux')).default,
               }),
             },
+            {
+              path: 'recherche-colis',
+              lazy: async () => ({
+                Component: (await import('app/pages/Expediteur/RechercheColis')).default,
+              }),
+            },
           ],
         },
       ],
