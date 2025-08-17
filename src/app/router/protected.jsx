@@ -98,6 +98,24 @@ const protectedRoutes = {
                  Component: (await import('app/pages/Admin/EditChauufeur')).default,
                }),
             },
+            {
+              path : 'rechercher-colis',
+              lazy: async () => ({
+                 Component: (await import('app/pages/Admin/RechercheColis')).default,
+               }),
+            },
+            {
+              path : 'modifier-colis',
+              lazy: async () => ({
+                 Component: (await import('app/pages/Admin/ModifColis')).default,
+               }),
+            },
+            {
+              path : 'supprimer-colis',
+              lazy: async () => ({
+                 Component: (await import('app/pages/Admin/deleteCmd')).default,
+               }),
+            },
           ],
         },
 

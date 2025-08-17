@@ -168,11 +168,6 @@ export default function SearchCmd() {
     }
   };
 
-  const handlePrint = () => {
-    if (packageData) {
-      window.open(`/imprimer?id=${packageData.id}`, '_blank');
-    }
-  };
 
   const UserIcon = () => (
     <svg className="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -228,7 +223,7 @@ export default function SearchCmd() {
         <div className="mb-8 p-5 bg-gray-50 rounded-lg border">
           <form onSubmit={handleSubmit(handleSearch)} className="flex flex-col sm:flex-row gap-3 items-end">
             <div className="flex-1">
-              <label className="block text-sm font-medium text-gray-700 mb-1">Code à barre / Numéro de téléphone</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Code à barre</label>
               <Input
                 placeholder="Saisir le code"
                 {...register("code", { 
@@ -259,13 +254,6 @@ export default function SearchCmd() {
             <div className="text-center p-6 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg">
               <h3 className="text-2xl font-bold mb-1">{packageData.code_barre}</h3>
               <p className="text-blue-100 mb-3">{packageData.frs}</p>
-              <Button 
-                type="button"
-                onClick={handlePrint}
-                className="bg-white/20 hover:bg-white/30 text-white border-white/30"
-              >
-                Imprimer
-              </Button>
             </div>
 
             {/* Grid principal */}

@@ -1,4 +1,5 @@
 // app/navigation/index.js
+import { colis } from "./colis";
 import { consolePickup } from "./consolePickup";
 import { consoleRetour } from "./consoleRetour";
 import { dashboards } from "./dashboards";
@@ -6,6 +7,7 @@ import { gestion } from "./gestionAdmin";
 import { gestion_agence } from "./gestionAgence";
 import { pickup } from "./pickup";
 import { runsheet } from "./runsheet";
+import { runsheetAdmin } from "./runsheetAdmin";
 
 export const navigation = [
     dashboards,
@@ -14,7 +16,9 @@ export const navigation = [
     pickup,
     runsheet,
     consolePickup,
-    consoleRetour
+    consoleRetour,
+    colis,
+    runsheetAdmin
 
 ];
 

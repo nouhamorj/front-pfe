@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { Button, Input, Timeline, TimelineItem } from "components/ui";
 import { toast } from "sonner";
 import { Page } from "components/shared/Page";
+import { MagnifyingGlassIcon} from "@heroicons/react/24/outline";
 
 
 export default function SearchCmd() {
@@ -167,12 +168,6 @@ export default function SearchCmd() {
     }
   };
 
-  const handlePrint = () => {
-    if (packageData) {
-      window.open(`/imprimer?id=${packageData.id}`, '_blank');
-    }
-  };
-
   const UserIcon = () => (
     <svg className="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
@@ -227,7 +222,7 @@ export default function SearchCmd() {
         <div className="mb-8 p-5 bg-gray-50 rounded-lg border">
           <form onSubmit={handleSubmit(handleSearch)} className="flex flex-col sm:flex-row gap-3 items-end">
             <div className="flex-1">
-              <label className="block text-sm font-medium text-gray-700 mb-1">Code à barre / Numéro de téléphone</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Code à barre</label>
               <Input
                 placeholder="Saisir le code"
                 {...register("code", { 
@@ -241,8 +236,12 @@ export default function SearchCmd() {
                 minLength="5"
               />
             </div>
-            <Button type="submit" color="success" disabled={loading}>
-              {loading ? "Recherche..." : "🔍 Rechercher"}
+            <Button 
+            type="submit" 
+            color="secondary"
+            icon={<MagnifyingGlassIcon />}
+            disabled={loading}>
+            {loading ? "Recherche..." : "Rechercher"}
             </Button>
           </form>
         </div>
@@ -254,13 +253,6 @@ export default function SearchCmd() {
             <div className="text-center p-6 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg">
               <h3 className="text-2xl font-bold mb-1">{packageData.code_barre}</h3>
               <p className="text-blue-100 mb-3">{packageData.frs}</p>
-              <Button 
-                type="button"
-                onClick={handlePrint}
-                className="bg-white/20 hover:bg-white/30 text-white border-white/30"
-              >
-                Imprimer
-              </Button>
             </div>
 
             {/* Grid principal */}
@@ -360,7 +352,7 @@ export default function SearchCmd() {
                 {/* Options en ligne */}
                 <div className="rounded-lg bg-gray-50 p-3 2xl:p-4">
                   <div className="flex justify-between space-x-1 mb-3">
-                    <p className="text-lg font-semibold text-gray-800">⚙️ Options</p>
+                    <p className="text-lg font-semibold text-gray-800"> Options</p>
                     <SettingsIcon />
                   </div>
                   <div className="grid grid-cols-3 gap-4 text-sm mb-3">
@@ -388,34 +380,7 @@ export default function SearchCmd() {
 
                 {/* Infos supplémentaires */}
                 {(expediteurData || agenceData) && (
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {expediteurData && (
-                      <div className="rounded-lg bg-gray-50 p-3 2xl:p-4">
-                        <div className="flex justify-between space-x-1 mb-3">
-                          <p className="text-lg font-semibold text-gray-800">Expéditeur</p>
-                          <BuildingIcon />
-                        </div>
-                        <div className="space-y-1 text-sm">
-                          <div className="flex justify-between">
-                            <span className="text-gray-600">Nom:</span>
-                            <span className="font-medium">{expediteurData.nom}</span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-gray-600">Page:</span>
-                            <span className="font-medium">{expediteurData.nom_page}</span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-gray-600">Tél:</span>
-                            <span className="font-medium">{expediteurData.tel}</span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-gray-600">Ville:</span>
-                            <span className="font-medium">{expediteurData.ville}</span>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                    
+                  <div className="grid grid-cols-1 md:grid-cols-1 gap-4">
                     {agenceData && (
                       <div className="rounded-lg bg-gray-50 p-3 2xl:p-4">
                         <div className="flex justify-between space-x-1 mb-3">
@@ -435,10 +400,6 @@ export default function SearchCmd() {
                             <span className="text-gray-600">Tél:</span>
                             <span className="font-medium">{agenceData.tel_agence}</span>
                           </div>
-                          <div className="flex justify-between">
-                            <span className="text-gray-600">CIN:</span>
-                            <span className="font-medium">{agenceData.cinResp}</span>
-                          </div>
                         </div>
                       </div>
                     )}
@@ -449,7 +410,7 @@ export default function SearchCmd() {
               {/* Colonne droite - Historique */}
               <div className="rounded-lg bg-gray-50 p-3 2xl:p-4">
                 <div className="flex justify-between space-x-1 mb-4">
-                  <p className="text-lg font-semibold text-gray-800">📊 Historique</p>
+                  <p className="text-lg font-semibold text-gray-800">Historique</p>
                   <ChartIcon />
                 </div>
                 {historique.length > 0 ? (
@@ -471,7 +432,7 @@ export default function SearchCmd() {
                               )}
                               {item.livreur_nom && (
                                 <div className="text-blue-600">
-                                  🚚 {item.livreur_nom} / {item.livreur_tel}
+                                  {item.livreur_nom} / {item.livreur_tel}
                                 </div>
                               )}
                             </div>
@@ -485,13 +446,6 @@ export default function SearchCmd() {
                 )}
               </div>
             </div>
-          </div>
-        )}
-
-        {/* Message si aucun résultat */}
-        {!loading && !packageData && (
-          <div className="text-center py-12">
-            <h4 className="text-xl font-semibold text-gray-400">Saisissez un code à barres pour rechercher un colis</h4>
           </div>
         )}
       </div>

@@ -14,7 +14,7 @@ import {
   getFacetedUniqueValues,
   getFacetedMinMaxValues,
 } from "@tanstack/react-table";
-import { useDeferredValue, useMemo, useState, useEffect, useCallback } from "react";
+import { useDeferredValue, useMemo, useState, useEffect } from "react";
 import clsx from "clsx";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router";
@@ -22,7 +22,7 @@ import { useNavigate } from "react-router";
 import { TableSortIcon } from "components/shared/table/TableSortIcon";
 import { PaginationSection } from "components/shared/table/PaginationSection";
 import { ConfirmModal } from "components/shared/ConfirmModal";
-import { Button, Table, THead, TBody, Th, Tr, Td, Badge, Avatar } from "components/ui";
+import { Button, Table, THead, TBody, Th, Tr, Td, Badge, Avatar, Select } from "components/ui";
 
 // ----------------------------------------------------------------------
 // Fonction fuzzyFilter
@@ -32,30 +32,10 @@ const fuzzyFilter = (row, columnId, value, addMeta) => {
   return itemRank.passed;
 };
 
-// Composant filtre par agence (version <select>)
-function AgenceFilter({ column }) {
-  const selectedValue = column?.getFilterValue() || "";
-  const options = column.columnDef.meta?.agenceOptions || [];
-  return (
-    <div className="flex items-center gap-2">
-      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-        Agence:
-      </span>
-      <select
-        value={selectedValue}
-        onChange={(e) => column.setFilterValue(e.target.value)}
-        className="block w-full rounded-lg border border-gray-300 bg-gray-50 px-3 py-2 text-sm text-gray-900 dark:border-dark-600 dark:bg-dark-700 dark:text-white"
-      >
-        <option value="">Toutes</option>
-        {options.map((option) => (
-          <option key={option.id} value={option.id}>
-            {option.libelle}
-          </option>
-        ))}
-      </select>
-    </div>
-  );
-}
+// Fonction pour filtrage exact
+const exactFilter = (row, columnId, value) => {
+  return row.getValue(columnId) === value;
+};
 
 // Composant de recherche amélioré
 function SearchInput({ value, onChange, placeholder }) {
@@ -144,7 +124,7 @@ function RowActions({ row, table }) {
     setDeleteSuccess(false);
   };
 
-  const handleDeleteRow = useCallback(async () => {
+  const handleDeleteRow = async () => {
     const id = row.original.id;
     setConfirmDeleteLoading(true);
     try {
@@ -169,7 +149,7 @@ function RowActions({ row, table }) {
     } finally {
       setConfirmDeleteLoading(false);
     }
-  }, [row, table]);
+  };
 
   const state = deleteError ? "error" : deleteSuccess ? "success" : "pending";
   const navigate = useNavigate();
@@ -208,6 +188,7 @@ function RowActions({ row, table }) {
 
 // Définition des colonnes
 const columnHelper = createColumnHelper();
+
 const columns = [
   columnHelper.accessor((row) => row.nom, {
     id: "nom",
@@ -238,13 +219,7 @@ const columns = [
     id: "agenceLibelle",
     header: "Agence",
     cell: AgenceCell,
-    filterFn: (row, columnId, filterValue) => {
-      if (!filterValue) return true;
-      return row.original.id_agence === filterValue;
-    },
-    meta: {
-      agenceOptions: [],
-    },
+    filterFn: exactFilter, // ✅ Utilise exactFilter
   }),
   columnHelper.accessor((row) => row.matricule, {
     id: "matricule",
@@ -267,18 +242,22 @@ const columns = [
   }),
 ];
 
-// Composant Toolbar amélioré
-function Toolbar({ table, agenceOptions }) {
+// Composant Toolbar
+function Toolbar({ table, agences }) {
   const navigate = useNavigate();
-  const agenceColumn = table.getColumn("agenceLibelle");
+  const [agenceFilter, setAgenceFilter] = useState("");
 
-  // Met à jour les options du filtre agence
+  // Met à jour les filtres de colonne
   useEffect(() => {
-    agenceColumn.columnDef.meta = {
-      ...agenceColumn.columnDef.meta,
-      agenceOptions,
-    };
-  }, [agenceOptions, agenceColumn]);
+    const filters = [];
+    if (agenceFilter) {
+      const agence = agences.find(ag => ag.id === parseInt(agenceFilter));
+      if (agence) {
+        filters.push({ id: "agenceLibelle", value: agence.libelle });
+      }
+    }
+    table.setColumnFilters(filters);
+  }, [agenceFilter, table, agences]);
 
   return (
     <div className="mb-6">
@@ -309,22 +288,32 @@ function Toolbar({ table, agenceOptions }) {
               onChange={(e) => table.setGlobalFilter(e.target.value)}
             />
           </div>
-          <div className="flex items-center gap-4">
-            <AgenceFilter column={agenceColumn} />
-            <Button
-              onClick={() => {
-                table.resetSorting();
-                table.resetPagination();
-                table.setGlobalFilter("");
-                agenceColumn?.setFilterValue("");
-              }}
-              className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors duration-200 dark:text-gray-400 dark:hover:text-white dark:hover:bg-dark-600"
-              unstyled
-              title="Réinitialiser les filtres"
-            >
-              <ArrowPathIcon className="h-5 w-5" />
-            </Button>
-          </div>
+          <Select
+            value={agenceFilter}
+            onChange={(e) => setAgenceFilter(e.target.value)}
+            className="w-full sm:w-48"
+          >
+            <option value="">Toutes les agences</option>
+            {agences.map((agence) => (
+              <option key={agence.id} value={agence.id}>
+                {agence.libelle}
+              </option>
+            ))}
+          </Select>
+          <Button
+            onClick={() => {
+              table.resetSorting();
+              table.resetPagination();
+              table.setGlobalFilter("");
+              table.setColumnFilters([]);
+              setAgenceFilter("");
+            }}
+            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors duration-200 dark:text-gray-400 dark:hover:text-white dark:hover:bg-dark-600"
+            unstyled
+            title="Réinitialiser les filtres"
+          >
+            <ArrowPathIcon className="h-5 w-5" />
+          </Button>
         </div>
       </div>
     </div>
@@ -338,6 +327,7 @@ function LivreursDataTable() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [globalFilter, setGlobalFilter] = useState("");
+  const [columnFilters, setColumnFilters] = useState([]);
   const deferredGlobalFilter = useDeferredValue(globalFilter);
 
   // Récupération des données
@@ -399,6 +389,7 @@ function LivreursDataTable() {
     },
     state: {
       globalFilter: deferredGlobalFilter,
+      columnFilters,
     },
     meta: {
       updateData: (rowIndex, columnId, value) => {
@@ -408,11 +399,11 @@ function LivreursDataTable() {
               return { ...old[rowIndex], [columnId]: value };
             }
             return row;
-          }),
+          })
         );
       },
       deleteRow: (row) => {
-        setLivreurs((old) => old.filter((oldRow) => oldRow.id !== row.original.id));
+        setLivreurs((old) => old.filter((r) => r.id !== row.original.id));
       },
     },
     filterFns: {
@@ -426,6 +417,7 @@ function LivreursDataTable() {
     globalFilterFn: fuzzyFilter,
     getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    onColumnFiltersChange: setColumnFilters,
   });
 
   if (loading) {
@@ -475,7 +467,7 @@ function LivreursDataTable() {
   return (
     <Page title="Gestion des livreurs">
       <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <Toolbar table={table} agenceOptions={agences} />
+        <Toolbar table={table} agences={agences} />
         <div className="overflow-x-auto">
           <Table className="w-full">
             <THead>
@@ -535,12 +527,12 @@ function LivreursDataTable() {
             </TBody>
           </Table>
         </div>
-        {table.getCoreRowModel().rows.length > 0 && (
+        {rows.length > 0 && (
           <div className="px-6 py-4">
             <PaginationSection table={table} />
           </div>
         )}
-        {table.getCoreRowModel().rows.length === 0 && (
+        {rows.length === 0 && (
           <div className="p-12 text-center">
             <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <UserIcon className="w-8 h-8 text-gray-400" />
@@ -559,9 +551,6 @@ function LivreursDataTable() {
 }
 
 // PropTypes
-AgenceFilter.propTypes = {
-  column: PropTypes.object,
-};
 SearchInput.propTypes = {
   value: PropTypes.string,
   onChange: PropTypes.func,
@@ -582,7 +571,7 @@ RowActions.propTypes = {
 };
 Toolbar.propTypes = {
   table: PropTypes.object,
-  agenceOptions: PropTypes.array,
+  agences: PropTypes.array,
 };
 
 export default LivreursDataTable;
