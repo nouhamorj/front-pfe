@@ -59,7 +59,8 @@ export default function ForgotPassword() {
 
   return (
     <Page title="Mot de passe oublié">
-      <main className="min-h-screen flex w-full items-center justify-center py-12">
+      <main className="min-h-screen flex w-full items-center justify-center py-12" 
+      style={{backgroundColor:"#e8f0feb0"}}>
         <div className="w-full max-w-md p-6 sm:p-8">
           <div className="text-center mb-8">
             <Logo className="mx-auto" style={{ height: "80px" }} aria-label="Logo de l'application" />

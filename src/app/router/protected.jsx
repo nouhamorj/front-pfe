@@ -116,6 +116,18 @@ const protectedRoutes = {
                  Component: (await import('app/pages/Admin/deleteCmd')).default,
                }),
             },
+            {
+              path : 'mon-profil',
+              lazy: async () => ({
+                 Component: (await import('app/pages/Admin/Profile')).default,
+               }),
+            },
+            {
+              path : 'personnaliser-mon-theme',
+              lazy: async () => ({
+                 Component: (await import('app/pages/Admin/Apparence')).default,
+               }),
+            },
           ],
         },
 
@@ -244,7 +256,36 @@ const protectedRoutes = {
                 Component: (await import('app/pages/Agence/ModifCmd')).default,
               }),
             },
-          
+            {
+              path: 'generer-echange',
+              lazy: async () => ({
+                Component: (await import('app/pages/Agence/GenererEchange')).default,
+              }),
+            },
+            {
+              path: 'liste-echange',
+              lazy: async () => ({
+                Component: (await import('app/pages/Agence/ListEchange')).default,
+              }),
+            },
+            {
+              path: '/agence/imprimer-echange/:id',
+              lazy: async () => ({
+                Component: (await import('app/pages/Agence/ImprimerEchange')).default,
+              }),
+            },
+            {
+              path: '/agence/personnaliser-mon-theme',
+              lazy: async () => ({
+                Component: (await import('app/pages/Agence/Apparence')).default,
+              }),
+            },
+            {
+              path: '/agence/mon-profil',
+              lazy: async () => ({
+                Component: (await import('app/pages/Agence/Profile')).default,
+              }),
+            },
           
           
           ],
@@ -308,6 +349,19 @@ const protectedRoutes = {
                 Component: (await import('app/pages/Expediteur/RechercheColis')).default,
               }),
             },
+            {
+              path: 'personnaliser-mon-theme',
+              lazy: async () => ({
+                Component: (await import('app/pages/Expediteur/Apparence')).default,
+              }),
+            },
+            {
+              path: 'mon-profil',
+              lazy: async () => ({
+                Component: (await import('app/pages/Expediteur/Profile')).default,
+              }),
+            },
+
           ],
         },
       ],

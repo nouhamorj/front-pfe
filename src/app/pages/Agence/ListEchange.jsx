@@ -1,11 +1,11 @@
+// src/app/pages/Agence/ListeEchange.jsx
 import { useState, useEffect, useDeferredValue } from "react";
 import { useAuthContext } from "app/contexts/auth/context";
 import { Page } from "components/shared/Page";
 import { useNavigate } from "react-router";
-import { Button, Badge, Table, THead, TBody, Th, Tr, Td } from "components/ui";
+import { Button, Table, THead, TBody, Th, Tr, Td } from "components/ui";
 import { DatePicker } from "components/shared/form/Datepicker";
-import { MagnifyingGlassIcon, ArrowPathIcon } from "@heroicons/react/24/outline";
-//import { toast } from "sonner";
+import { MagnifyingGlassIcon, PrinterIcon, PlusIcon } from "@heroicons/react/24/outline";
 import {
   flexRender,
   getCoreRowModel,
@@ -20,116 +20,103 @@ import { TableSortIcon } from "components/shared/table/TableSortIcon";
 import { rankItem } from "@tanstack/match-sorter-utils";
 import clsx from "clsx";
 
-// Fonction fuzzyFilter pour la recherche
+// Fonction fuzzyFilter
 const fuzzyFilter = (row, columnId, value, addMeta) => {
   const itemRank = rankItem(row.getValue(columnId), value);
   addMeta({ itemRank });
   return itemRank.passed;
 };
 
-export default function ConsolePickupList() {
+export default function ListeEchange() {
   const { user } = useAuthContext();
   const navigate = useNavigate();
   const agenceId = user?.relatedIds?.id;
+  const token = localStorage.getItem("authToken") || sessionStorage.getItem("authToken");
 
-  const [consoles, setConsoles] = useState([]);
+  const [echanges, setEchanges] = useState([]);
   const [loading, setLoading] = useState(true);
   const [hasSearched, setHasSearched] = useState(false);
   const [globalFilter, setGlobalFilter] = useState("");
   const [sorting, setSorting] = useState([]);
-  const [columnFilters, setColumnFilters] = useState([]);
 
-  const deferredGlobalFilter = useDeferredValue(globalFilter);
-
-  // Filtres
+  // Filtres dates
   const [dt1, setDt1] = useState(new Date().toISOString().split("T")[0]);
   const [dt2, setDt2] = useState(new Date().toISOString().split("T")[0]);
 
-  const token = localStorage.getItem("authToken") || sessionStorage.getItem("authToken");
+  const deferredGlobalFilter = useDeferredValue(globalFilter);
 
-  // Définition des colonnes - maintenant à l'intérieur du composant pour accéder à navigate
   const columnHelper = createColumnHelper();
+
   const columns = [
-    columnHelper.accessor((row) => row.id_console, {
-      id: "id_console",
-      header: "N° Console",
+    columnHelper.accessor("code_barre", {
+      id: "code_barre",
+      header: "Code à barre",
       cell: ({ row }) => (
-        <span className="text-sm font-medium text-blue-600 dark:text-blue-400">
-          {row.original.id_console}
+        <span className="font-mono text-sm text-blue-600 dark:text-blue-400 font-medium">
+          {row.original.code_barre}
         </span>
       ),
     }),
-    columnHelper.accessor((row) => row.agence_dest, {
-      id: "destination",
-      header: "Destination",
+    columnHelper.accessor("code_echange", {
+      id: "code_echange",
+      header: "Code échange",
+      cell: ({ row }) => (
+        <span className="font-mono text-sm text-gray-900 dark:text-white">
+          {row.original.code_echange}
+        </span>
+      ),
+    }),
+    columnHelper.accessor("expediteur_nom_page", {
+      id: "expediteur",
+      header: "Expéditeur",
       cell: ({ row }) => (
         <span className="text-sm text-gray-900 dark:text-white">
-          {row.original.agence_dest}
+          {row.original.expediteur_nom_page || "Inconnu"}
         </span>
       ),
     }),
-    columnHelper.accessor((row) => row.dt, {
-      id: "date",
+    columnHelper.accessor("date_echange", {
+      id: "date_echange",
       header: "Date",
-      cell: ({ row }) => (
-        <span className="text-sm text-gray-700 dark:text-gray-300">
-          {new Date(row.original.dt).toLocaleString("fr-TN", {
-            day: "2-digit",
-            month: "2-digit",
-            year: "numeric",
-            hour: "2-digit",
-            minute: "2-digit",
-          })}
-        </span>
-      ),
-    }),
-    columnHelper.accessor((row) => row.etat, {
-      id: "etat",
-      header: "État",
-      cell: ({ row }) => (
-        <div className="flex items-center">
-          <Badge
-            color={row.original.etat === 1 ? "success" : "warning"}
-            className="px-3 py-1.5 text-xs font-medium"
-          >
-            {row.original.etat === 1 ? "Validé" : "En cours"}
-          </Badge>
-        </div>
-      ),
-    }),
-    columnHelper.accessor((row) => row.nb_colis, {
-      id: "nb_colis",
-      header: "Colis",
-      cell: ({ row }) => (
-        <span className="text-sm font-semibold text-gray-900 dark:text-white">
-          {row.original.nb_colis}
-        </span>
-      ),
+      cell: ({ row }) => {
+        const date = new Date(row.original.date_echange);
+        return (
+          <span className="text-sm text-gray-700 dark:text-gray-300">
+            {date.toLocaleDateString("fr-TN", {
+              day: "2-digit",
+              month: "2-digit",
+              year: "numeric",
+            })}
+          </span>
+        );
+      },
     }),
     columnHelper.display({
       id: "actions",
       header: "Action",
       cell: ({ row }) => (
-        <div className="flex items-center">
+        <div className="flex items-center gap-2">
           <Button
             size="sm"
             color="info"
-            onClick={() => navigate(`/agence/detail-console-retour/${row.original.id_console}`)}
-            className="px-3 py-1.5 text-xs"
-            icon={
-              <i className="fa fa-list text-white text-xs opacity-80"></i>
+            icon={<PrinterIcon className="h-4 w-4" />}
+            onClick={() =>
+              window.open(
+                `/agence/imprimer-echange/${row.original.id}`,
+                "_blank"
+              )
             }
+            className="px-3 py-1.5 text-xs"
           >
-            Détail
+            Imprimer
           </Button>
         </div>
       ),
     }),
   ];
 
-  const fetchConsoles = async () => {
+  const fetchEchanges = async () => {
     if (!agenceId) {
-      //toast.error("Agence non trouvée.");
       setLoading(false);
       return;
     }
@@ -137,7 +124,7 @@ export default function ConsolePickupList() {
     setLoading(true);
     try {
       const response = await fetch(
-        `http://localhost:3000/api/console-retour/date?agence=${agenceId}&dt1=${dt1}&dt2=${dt2}`,
+        `http://localhost:3000/api/echange?dt1=${dt1}&dt2=${dt2}`,
         {
           method: "GET",
           headers: {
@@ -147,47 +134,34 @@ export default function ConsolePickupList() {
         }
       );
 
-      if (!response.ok) {
-        const error = await response.json();
-
-        // Si c'est juste qu'il n'y a pas de données, on ne considère pas ça comme une erreur
-        if (error.message && error.message.includes("Aucune console retour trouvée")) {
-          setConsoles([]);
-          setHasSearched(true);
-          setLoading(false);
-          return;
-        }
-
-        throw new Error(error.message || "Échec du chargement des consoles");
-      }
+      if (!response.ok) throw new Error("Échec du chargement des échanges");
 
       const data = await response.json();
-      setConsoles(data);
+      setEchanges(data.data || []);
       setHasSearched(true);
     } catch (err) {
       console.error("Erreur:", err);
-      //toast.error(err.message || "Impossible de charger les données.");
-      setConsoles([]);
+      setEchanges([]);
       setHasSearched(true);
     } finally {
       setLoading(false);
     }
   };
 
-  // Charger au montage
+  // Charger au montage ou quand les filtres changent
   useEffect(() => {
-    fetchConsoles();
-  }, [agenceId, dt1, dt2]); // Ajout des dépendances manquantes
+    fetchEchanges();
+  }, [agenceId, dt1, dt2]);
 
   const handleSearch = (e) => {
     e.preventDefault();
-    table.setPageIndex(0); // Reset à la première page lors d'une nouvelle recherche
-    fetchConsoles();
+    table.setPageIndex(0);
+    fetchEchanges();
   };
 
-  // Configuration du tableau avec React Table
+  // Configuration du tableau
   const table = useReactTable({
-    data: consoles,
+    data: echanges,
     columns,
     initialState: {
       pagination: { pageSize: 10 },
@@ -195,7 +169,6 @@ export default function ConsolePickupList() {
     state: {
       globalFilter: deferredGlobalFilter,
       sorting,
-      columnFilters,
     },
     filterFns: {
       fuzzy: fuzzyFilter,
@@ -207,25 +180,37 @@ export default function ConsolePickupList() {
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
-    onColumnFiltersChange: setColumnFilters,
   });
 
   const rows = table.getRowModel().rows;
 
   return (
-    <Page title="Liste des Consoles Pickup">
+    <Page title="Liste des échanges">
       <div className="w-full mx-auto bg-white dark:bg-dark-800 p-6 rounded-xl shadow">
-        <h5 className="text-xl font-semibold text-gray-800 dark:text-white mb-4">
-          Console Retour
-        </h5>
+        <div className="flex flex-wrap items-center justify-between mb-6">
+           <h5 className="text-xl font-semibold text-gray-800 dark:text-white">
+            Liste des colis
+          </h5>
+          <Button
+            color="primary"
+            icon={<PlusIcon className="h-5 w-5" />}
+            onClick={() => navigate("/agence/generer-echange")}
+            className="mt-2 sm:mt-0"
+          >
+            Ajouter un échange
+          </Button>
+        </div>
+
         {/* Filtres */}
         <form onSubmit={handleSearch} className="bg-gray-50 dark:bg-dark-700 p-4 rounded-lg mb-6 space-y-4 md:space-y-0 md:space-x-4 md:flex md:items-end">
           <div className="flex-1">
             <label className="block text-sm font-medium mb-1">Du</label>
             <DatePicker
               value={dt1}
-              onChange={(date) => setDt1(date ? new Date(date).toISOString().split("T")[0] : "")}
-              placeholder="Choisir la date de début"
+              onChange={(date) =>
+                setDt1(date ? new Date(date).toISOString().split("T")[0] : "")
+              }
+              placeholder="Date de début"
               className="w-full"
             />
           </div>
@@ -234,8 +219,10 @@ export default function ConsolePickupList() {
             <label className="block text-sm font-medium mb-1">Au</label>
             <DatePicker
               value={dt2}
-              onChange={(date) => setDt2(date ? new Date(date).toISOString().split("T")[0] : "")}
-              placeholder="Choisir la date de fin"
+              onChange={(date) =>
+                setDt2(date ? new Date(date).toISOString().split("T")[0] : "")
+              }
+              placeholder="Date de fin"
               className="w-full"
             />
           </div>
@@ -250,19 +237,21 @@ export default function ConsolePickupList() {
           </Button>
         </form>
 
-        {/* Contenu principal */}
+        {/* Contenu */}
         {loading ? (
           <div className="flex justify-center py-10">
-            <ArrowPathIcon className="animate-spin h-8 w-8 text-blue-500" />
-            <span className="ml-2 text-gray-600 dark:text-gray-400">Chargement des consoles...</span>
+            <svg className="animate-spin h-8 w-8 text-blue-500" fill="none" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            <span className="ml-2 text-gray-600 dark:text-gray-400">Chargement...</span>
           </div>
-        ) : hasSearched && consoles.length === 0 ? (
+        ) : hasSearched && echanges.length === 0 ? (
           <div className="text-center py-10 text-gray-500">
-            Aucune console Retour trouvée pour cette période.
+            Aucun colis échange trouvé dans cette période.
           </div>
-        ) : consoles.length > 0 ? (
+        ) : (
           <div>
-            {/* Tableau */}
             <div className="overflow-x-auto">
               <Table className="w-full">
                 <THead>
@@ -279,20 +268,12 @@ export default function ConsolePickupList() {
                               onClick={header.column.getToggleSortingHandler()}
                             >
                               <span>
-                                {header.isPlaceholder
-                                  ? null
-                                  : flexRender(
-                                    header.column.columnDef.header,
-                                    header.getContext(),
-                                  )}
+                                {flexRender(header.column.columnDef.header, header.getContext())}
                               </span>
                               <TableSortIcon sorted={header.column.getIsSorted()} />
                             </div>
-                          ) : header.isPlaceholder ? null : (
-                            flexRender(
-                              header.column.columnDef.header,
-                              header.getContext(),
-                            )
+                          ) : (
+                            flexRender(header.column.columnDef.header, header.getContext())
                           )}
                         </Th>
                       ))}
@@ -305,15 +286,11 @@ export default function ConsolePickupList() {
                       key={row.id}
                       className={clsx(
                         "border-b border-gray-200 dark:border-dark-600 hover:bg-gray-50 dark:hover:bg-dark-700 transition-colors duration-200",
-                        index % 2 === 0 && "bg-white dark:bg-dark-800",
-                        index % 2 === 1 && "bg-gray-50/50 dark:bg-dark-750"
+                        index % 2 === 0 ? "bg-white dark:bg-dark-800" : "bg-gray-50/50 dark:bg-dark-750"
                       )}
                     >
                       {row.getVisibleCells().map((cell) => (
-                        <Td
-                          key={cell.id}
-                          className="px-6 py-4 whitespace-nowrap text-sm"
-                        >
+                        <Td key={cell.id} className="px-6 py-4 whitespace-nowrap text-sm">
                           {flexRender(cell.column.columnDef.cell, cell.getContext())}
                         </Td>
                       ))}
@@ -323,14 +300,13 @@ export default function ConsolePickupList() {
               </Table>
             </div>
 
-            {/* Pagination */}
             {rows.length > 0 && (
               <div className="px-6 py-4">
                 <PaginationSection table={table} />
               </div>
             )}
           </div>
-        ) : null}
+        )}
       </div>
     </Page>
   );

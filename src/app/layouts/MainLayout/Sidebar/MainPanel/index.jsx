@@ -4,7 +4,7 @@ import { Link } from "react-router";
 import clsx from "clsx";
 import Logo from "assets/sidebarLogo.svg?react";
 import { Menu } from "./Menu";
-import { Profile } from "../../Profile";
+
 import { useThemeContext } from "app/contexts/theme/context";
 
 
@@ -29,7 +29,7 @@ export function MainPanel({ nav, setActiveSegment, activeSegment }) {
         />
 
         <div className="flex flex-col items-center space-y-3 py-2.5">
-          <Profile />
+         
         </div>
       </div>
     </div>

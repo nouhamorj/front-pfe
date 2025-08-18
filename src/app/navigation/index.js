@@ -5,6 +5,9 @@ import { consoleRetour } from "./consoleRetour";
 import { dashboards } from "./dashboards";
 import { gestion } from "./gestionAdmin";
 import { gestion_agence } from "./gestionAgence";
+import { parametresAdmin } from "./ParametresAdmin";
+import { parametresAgence } from "./ParametresAgence";
+import { parametresExpediteur } from "./ParametresExpediteur";
 import { pickup } from "./pickup";
 import { runsheet } from "./runsheet";
 import { runsheetAdmin } from "./runsheetAdmin";
@@ -18,8 +21,11 @@ export const navigation = [
     consolePickup,
     consoleRetour,
     colis,
-    runsheetAdmin
-
+    runsheetAdmin,
+    parametresAdmin,
+    parametresAgence,
+    parametresExpediteur
+    
 ];
 
 export const getNavigationByRole = (userRole) => {

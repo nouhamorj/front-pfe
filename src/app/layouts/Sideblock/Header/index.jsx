@@ -10,7 +10,7 @@ import { Notifications } from "components/template/Notifications";
 import { Button } from "components/ui";
 import { SidebarToggleBtn } from "components/shared/SidebarToggleBtn";
 import { useBreakpointsContext } from "app/contexts/breakpoint/context";
-import { Profile } from "../Profile";
+
 import { Search } from "components/template/Search";
 import { useThemeContext } from "app/contexts/theme/context";
 
@@ -78,8 +78,6 @@ export function Header() {
         </div>
         <Notifications />
         <RightSidebar />
-        <LanguageSelector />
-        <Profile />
       </div>
     </header>
   );

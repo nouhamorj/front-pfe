@@ -64,9 +64,9 @@ export const dashboards = {
         },
         {
             id: 'generer-echange',
-            path: '/agence/generer-echange',
+            path: '/agence/liste-echange',
             type: NAV_TYPE_ITEM,
-            title: 'Ajouter Colis échange ',
+            title: 'Colis échange ',
             allowedRoles: ['chef_agence']
         },
 

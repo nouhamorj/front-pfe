@@ -118,7 +118,7 @@ export function Profile() {
                     close();
                   }}>
                     <ArrowLeftStartOnRectangleIcon className="size-4.5" />
-                    <span>Se déconnecter</span>
+                    {{/*<span>Se déconnecter</span>*/}}
                   </Button>
                 </div>
               </div>

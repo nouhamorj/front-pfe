@@ -215,9 +215,9 @@ export default function ConsolePickupList() {
   return (
     <Page title="Liste des Consoles Pickup">
       <div className="w-full mx-auto bg-white dark:bg-dark-800 p-6 rounded-xl shadow">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-          Consoles Pickup
-        </h1>
+        <h5 className="text-xl font-semibold text-gray-800 dark:text-white mb-4">
+          Console PickUp
+        </h5>
         {/* Filtres */}
         <form onSubmit={handleSearch} className="bg-gray-50 dark:bg-dark-700 p-4 rounded-lg mb-6 space-y-4 md:space-y-0 md:space-x-4 md:flex md:items-end">
           <div className="flex-1">

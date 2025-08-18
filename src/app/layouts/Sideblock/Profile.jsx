@@ -7,35 +7,14 @@ import {
 } from "@headlessui/react";
 import {
   ArrowLeftStartOnRectangleIcon,
-  Cog6ToothIcon,
 } from "@heroicons/react/24/outline";
-import {TbUser } from "react-icons/tb";
+
 import { Link } from "react-router";
 
 // Local Imports
 import { Avatar, AvatarDot, Button } from "components/ui";
 
 // ----------------------------------------------------------------------
-
-const links = [
-  {
-    id: "1",
-    title: "Profile",
-    description: "Your profile Setting",
-    to: "/settings/general",
-    Icon: TbUser,
-    color: "warning",
-  },
-
-  {
-    id: "2",
-    title: "Settings",
-    description: "Webapp settings",
-    to: "/settings/appearance",
-    Icon: Cog6ToothIcon,
-    color: "success",
-  },
-];
 
 export function Profile() {
   return (

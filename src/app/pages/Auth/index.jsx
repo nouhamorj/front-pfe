@@ -38,6 +38,7 @@ export default function SignIn() {
     <Page title="Login">
       <main
         className="min-h-100vh grid w-full grow grid-cols-1 place-items-center"
+        style={{backgroundColor:'#e8f0feb0'}}
       >
         <div className="w-full max-w-[26rem] p-4 sm:px-5">
           <div className="text-center">
@@ -45,7 +46,7 @@ export default function SignIn() {
           </div>
           <Card
             className="mt-5 rounded-lg p-5 lg:p-7"
-            style={{ borderColor: " #272E6480" }}
+            style={{ borderColor: " #272E6480", backgroundColor :"#fff" }}
           >
             <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
               <div className="space-y-4">
