@@ -1,17 +1,19 @@
 // Import Dependencies
 import { Page } from "components/shared/Page";
+import { Card } from "components/ui";
 import { useState, useEffect } from "react";
 import {
-  ClockIcon,
-  TruckIcon,
-  CheckBadgeIcon,
-  ArrowPathIcon,
-  XCircleIcon,
-  ArrowLeftIcon,
-  ArrowRightIcon,
-  CurrencyDollarIcon,
-  ArchiveBoxIcon,
-} from "@heroicons/react/20/solid";
+  FaClock,
+  FaTruck,
+  FaTimes,
+  FaArchive,
+  FaArrowLeft,
+  FaSync,
+  FaCheck,
+  FaArrowRight,
+  FaBox,
+  FaDollarSign,
+} from "react-icons/fa";
 
 export default function Home() {
   const [stats, setStats] = useState({
@@ -29,6 +31,7 @@ export default function Home() {
     retourExpediteurs: 0,
     retourRecuPayes: 0,
   });
+
   const [loading, setLoading] = useState(true);
 
   // ✅ Extraire l'ID de l'agence depuis le token JWT
@@ -38,7 +41,7 @@ export default function Home() {
       if (!authToken) return null;
 
       const payload = JSON.parse(atob(authToken.split('.')[1]));
-      return payload.relatedId; // Assurez-vous que c'est bien "relatedId" ou "agenceId"
+      return payload.relatedId;
     } catch (error) {
       console.error('Erreur lors de l\'extraction de l\'ID agence:', error);
       return null;
@@ -46,7 +49,7 @@ export default function Home() {
   };
 
   // ✅ Fonction pour récupérer le nombre de commandes par état
-  const fetchStatForEtat = async (etatId, token, agenceId) => { // Ordre corrigé
+  const fetchStatForEtat = async (etatId, token, agenceId) => {
     try {
       const response = await fetch(
         `http://localhost:3000/api/commandes/agence/${agenceId}/etat/${etatId}`,
@@ -76,39 +79,37 @@ export default function Home() {
     try {
       setLoading(true);
       const authToken = localStorage.getItem('authToken');
-      const agenceId = getAgenceId(); // ✅ Récupère l'ID agence
+      const agenceId = getAgenceId();
 
       if (!authToken || !agenceId) {
         console.error('Token ou ID agence manquant');
-        setStats(prev => ({ ...prev, enAttente: 0 })); // Optionnel : afficher 0
         return;
       }
 
       const etatsMapping = {
         enAttente: 0,
-        enCours: 1,
-        livres: 2,
-        retourExpediteurs: 5,
-        retourInterAgence: 7,
-        auDepot: 8,
-        livresPayes: 10,
-        retourDepot: 11,
-        retourRecuPayes: 30,
-        retourDefinitif: 31,
-        aVerifier: 20,
         aEnlever: 12,
         enleves: 13,
+        auDepot: 8,
+        retourDepot: 11,
+        enCours: 1,
+        aVerifier: 20,
+        livres: 2,
+        livresPayes: 10,
+        retourDefinitif: 31,
+        retourInterAgence: 7,
+        retourExpediteurs: 5,
+        retourRecuPayes: 30,
       };
 
-      // ✅ Appels parallèles
       const promises = Object.entries(etatsMapping).map(async ([key, etatId]) => {
-        const count = await fetchStatForEtat(etatId, authToken, agenceId); // ✅ Ordre correct
+        const count = await fetchStatForEtat(etatId, authToken, agenceId);
         return [key, count];
       });
 
       const results = await Promise.all(promises);
-
       const newStats = {};
+
       results.forEach(([key, count]) => {
         newStats[key] = count;
       });
@@ -121,10 +122,61 @@ export default function Home() {
     }
   };
 
-  // ✅ Charger les stats au montage
   useEffect(() => {
     fetchAllStats();
   }, []);
+
+  // 🎨 Mapper les icônes
+  const getIcon = (key) => {
+    switch (key) {
+      case 'enAttente': return <FaClock className="size-5 text-white" />;
+      case 'aEnlever': return <FaTruck className="size-5 text-white" />;
+      case 'enleves': return <FaTimes className="size-5 text-white" />;
+      case 'auDepot': return <FaArchive className="size-5 text-white" />;
+      case 'retourDepot': return <FaArrowLeft className="size-5 text-white" />;
+      case 'enCours': return <FaSync className="size-5 text-white" />;
+      case 'aVerifier': return <FaCheck className="size-5 text-white" />;
+      case 'livres': return <FaCheck className="size-5 text-white" />;
+      case 'livresPayes': return <FaDollarSign className="size-5 text-white" />;
+      case 'retourDefinitif': return <FaTimes className="size-5 text-white" />;
+      case 'retourInterAgence': return <FaArrowRight className="size-5 text-white" />;
+      case 'retourExpediteurs': return <FaBox className="size-5 text-white" />;
+      case 'retourRecuPayes': return <FaDollarSign className="size-5 text-white" />;
+      default: return <FaBox className="size-5 text-white" />;
+    }
+  };
+
+  // 🎨 Mapper les couleurs
+  const getBgColor = (key) => {
+    switch (key) {
+      case 'enAttente': return 'bg-yellow-500';
+      case 'aEnlever': return 'bg-cyan-600';
+      case 'enleves': return 'bg-red-600';
+      case 'auDepot': return 'bg-blue-600';
+      case 'retourDepot': return 'bg-orange-500';
+      case 'enCours': return 'bg-indigo-600';
+      case 'aVerifier': return 'bg-purple-600';
+      case 'livres': return 'bg-green-500';
+      case 'livresPayes': return 'bg-emerald-600';
+      case 'retourDefinitif': return 'bg-red-700';
+      case 'retourInterAgence': return 'bg-teal-600';
+      case 'retourExpediteurs': return 'bg-amber-600';
+      case 'retourRecuPayes': return 'bg-emerald-700';
+      default: return 'bg-gray-600';
+    }
+  };
+
+  // 🔤 Formater le nom affiché
+  const formatTitle = (key) => {
+    return key
+      .replace(/([A-Z])/g, ' $1')
+      .replace(/^./, str => str.toUpperCase())
+      .replace('Enleves', 'Enlevés')
+      .replace('AEnlever', 'À enlever')
+      .replace('RetourExpediteurs', 'Retour Expéditeurs')
+      .replace('RetourInterAgence', 'Retour Inter-agence')
+      .replace('RetourRecuPayes', 'Retour reçu payés');
+  };
 
   return (
     <Page title="Tableau de bord">
@@ -133,152 +185,36 @@ export default function Home() {
           <h2 className="truncate text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50">
             Tableau de bord
           </h2>
+          <p className="mt-1 text-sm text-gray-500">Statistiques de &lsquo;agence</p>
         </div>
 
-        {/* Grille des statistiques */}
-        <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4 lg:grid-cols-6 2xl:gap-6">
-          {/* En attente */}
-          <div className="rounded-lg bg-gray-150 p-3 dark:bg-dark-700 2xl:p-4">
-            <div className="flex justify-between space-x-1">
-              <p className="text-xl font-semibold text-gray-800 dark:text-dark-100">
-                {loading ? '...' : stats.enAttente}
-              </p>
-              <ClockIcon className="size-5 text-warning" />
-            </div>
-            <p className="mt-1 text-xs-plus">En attente</p>
-          </div>
+        {/* Grille des cartes */}
+        <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-6">
+          {Object.keys(stats).map((key) => {
+            const count = stats[key];
+            const Icon = getIcon(key);
+            const bgColor = getBgColor(key);
+            const title = formatTitle(key);
 
-          {/* À enlever */}
-          <div className="rounded-lg bg-gray-150 p-3 dark:bg-dark-700 2xl:p-4">
-            <div className="flex justify-between space-x-1">
-              <p className="text-xl font-semibold text-gray-800 dark:text-dark-100">
-                {loading ? '...' : stats.aEnlever}
-              </p>
-              <TruckIcon className="size-5 text-info" />
-            </div>
-            <p className="mt-1 text-xs-plus">À enlever</p>
-          </div>
+            return (
+              <Card className="p-4 sm:p-5" key={key}>
+                {/* Icône ronde colorée */}
+                <div
+                  className={`flex size-12 items-center justify-center rounded-xl ${bgColor} shadow-xl shadow-${bgColor.replace('bg-', '').split('-')[0]}-600/50 dark:${bgColor} dark:shadow-${bgColor.replace('bg-', '').split('-')[0]}-400/50`}
+                >
+                  {Icon}
+                </div>
 
-          {/* Enlevés */}
-          <div className="rounded-lg bg-gray-150 p-3 dark:bg-dark-700 2xl:p-4">
-            <div className="flex justify-between space-x-1">
-              <p className="text-xl font-semibold text-gray-800 dark:text-dark-100">
-                {loading ? '...' : stats.enleves}
-              </p>
-              <XCircleIcon className="size-5 text-error" />
-            </div>
-            <p className="mt-1 text-xs-plus">Enlevés</p>
-          </div>
+                {/* Titre */}
+                <p className="mt-4 text-sm font-medium text-gray-600 dark:text-dark-200">{title}</p>
 
-          {/* Au dépôt */}
-          <div className="rounded-lg bg-gray-150 p-3 dark:bg-dark-700 2xl:p-4">
-            <div className="flex justify-between space-x-1">
-              <p className="text-xl font-semibold text-gray-800 dark:text-dark-100">
-                {loading ? '...' : stats.auDepot}
-              </p>
-              <ArchiveBoxIcon className="size-5 text-primary-500" />
-            </div>
-            <p className="mt-1 text-xs-plus">Au dépôt</p>
-          </div>
-
-          {/* Retour dépôt */}
-          <div className="rounded-lg bg-gray-150 p-3 dark:bg-dark-700 2xl:p-4">
-            <div className="flex justify-between space-x-1">
-              <p className="text-xl font-semibold text-gray-800 dark:text-dark-100">
-                {loading ? '...' : stats.retourDepot}
-              </p>
-              <ArrowLeftIcon className="size-5 text-warning" />
-            </div>
-            <p className="mt-1 text-xs-plus">Retour dépôt</p>
-          </div>
-
-          {/* En cours */}
-          <div className="rounded-lg bg-gray-150 p-3 dark:bg-dark-700 2xl:p-4">
-            <div className="flex justify-between space-x-1">
-              <p className="text-xl font-semibold text-gray-800 dark:text-dark-100">
-                {loading ? '...' : stats.enCours}
-              </p>
-              <ArrowPathIcon className="size-5 text-primary-500" />
-            </div>
-            <p className="mt-1 text-xs-plus">En cours</p>
-          </div>
-
-          {/* À vérifier */}
-          <div className="rounded-lg bg-gray-150 p-3 dark:bg-dark-700 2xl:p-4">
-            <div className="flex justify-between space-x-1">
-              <p className="text-xl font-semibold text-gray-800 dark:text-dark-100">
-                {loading ? '...' : stats.aVerifier}
-              </p>
-              <CheckBadgeIcon className="size-5 text-success" />
-            </div>
-            <p className="mt-1 text-xs-plus">À vérifier</p>
-          </div>
-
-          {/* Livrés */}
-          <div className="rounded-lg bg-gray-150 p-3 dark:bg-dark-700 2xl:p-4">
-            <div className="flex justify-between space-x-1">
-              <p className="text-xl font-semibold text-gray-800 dark:text-dark-100">
-                {loading ? '...' : stats.livres}
-              </p>
-              <CheckBadgeIcon className="size-5 text-success" />
-            </div>
-            <p className="mt-1 text-xs-plus">Livrés</p>
-          </div>
-
-          {/* Livrés payés */}
-          <div className="rounded-lg bg-gray-150 p-3 dark:bg-dark-700 2xl:p-4">
-            <div className="flex justify-between space-x-1">
-              <p className="text-xl font-semibold text-gray-800 dark:text-dark-100">
-                {loading ? '...' : stats.livresPayes}
-              </p>
-              <CurrencyDollarIcon className="size-5 text-secondary" />
-            </div>
-            <p className="mt-1 text-xs-plus">Livrés payés</p>
-          </div>
-
-          {/* Retour définitif */}
-          <div className="rounded-lg bg-gray-150 p-3 dark:bg-dark-700 2xl:p-4">
-            <div className="flex justify-between space-x-1">
-              <p className="text-xl font-semibold text-gray-800 dark:text-dark-100">
-                {loading ? '...' : stats.retourDefinitif}
-              </p>
-              <XCircleIcon className="size-5 text-error" />
-            </div>
-            <p className="mt-1 text-xs-plus">Retour définitif</p>
-          </div>
-
-          {/* Retour Inter-agence */}
-          <div className="rounded-lg bg-gray-150 p-3 dark:bg-dark-700 2xl:p-4">
-            <div className="flex justify-between space-x-1">
-              <p className="text-xl font-semibold text-gray-800 dark:text-dark-100">
-                {loading ? '...' : stats.retourInterAgence}
-              </p>
-              <ArrowRightIcon className="size-5 text-info" />
-            </div>
-            <p className="mt-1 text-xs-plus">Retour Inter-agence</p>
-          </div>
-
-          {/* Retour Expéditeurs */}
-          <div className="rounded-lg bg-gray-150 p-3 dark:bg-dark-700 2xl:p-4">
-            <div className="flex justify-between space-x-1">
-              <p className="text-xl font-semibold text-gray-800 dark:text-dark-100">
-                {loading ? '...' : stats.retourExpediteurs}
-              </p>
-              <ArrowLeftIcon className="size-5 text-warning" />
-            </div>
-            <p className="mt-1 text-xs-plus">Retour Expéditeurs</p>
-          </div>
-
-          {/* Retour reçu payés */}
-          <div className="rounded-lg bg-gray-150 p-3 dark:bg-dark-700 2xl:p-4">
-            <div className="flex justify-between space-x-1">
-              <p className="text-xl font-semibold text-gray-800 dark:text-dark-100">
-                {loading ? '...' : stats.retourRecuPayes}
-              </p>
-              <CurrencyDollarIcon className="size-5 text-secondary" />
-            </div>
-            <p className="mt-1 text-xs-plus">Retour reçu payés</p>
-          </div>
+                {/* Nombre */}
+                <p className="mt-1 font-medium text-gray-800 dark:text-dark-100">
+                  <span className="text-2xl">{loading ? '...' : count}</span>
+                </p>
+              </Card>
+            );
+          })}
         </div>
       </div>
     </Page>

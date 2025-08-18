@@ -1,73 +1,115 @@
 // Import Dependencies
 import { Page } from "components/shared/Page";
+import { Card } from "components/ui";
 import { useState, useEffect } from "react";
 import {
-  ClockIcon,
-  TruckIcon,
-  CheckBadgeIcon,
-  ArrowPathIcon,
-  XCircleIcon,
-  ArrowLeftIcon,
-  ArrowRightIcon,
-  CurrencyDollarIcon,
-  ArchiveBoxIcon,
-} from "@heroicons/react/20/solid";
+  FaClock,
+  FaTruck,
+  FaTimes,
+  FaArchive,
+  FaArrowLeft,
+  FaSync,
+  FaCheck,
+  FaArrowRight,
+  FaBox,
+  FaDollarSign,
+} from "react-icons/fa";
 
 export default function Home() {
   const [stats, setStats] = useState({
     enAttente: 0,
-    aEnlever: 0,
-    enleves: 0,
+    //aEnlever: 0,
+    //enleves: 0,
     auDepot: 0,
     retourDepot: 0,
     enCours: 0,
-    aVerifier: 0,
+    //aVerifier: 0,
     livres: 0,
     livresPayes: 0,
     retourDefinitif: 0,
     retourInterAgence: 0,
     retourExpediteurs: 0,
-    retourRecuPayes: 0,
+    //retourRecuPayes: 0,
   });
+
+  const [sommes, setSommes] = useState({
+    enAttente: 0,
+    aEnlever: 0,
+    ////enleves: 0,
+    auDepot: 0,
+    retourDepot: 0,
+    enCours: 0,
+    //aVerifier: 0,
+    livres: 0,
+    livresPayes: 0,
+    retourDefinitif: 0,
+    retourInterAgence: 0,
+    retourExpediteurs: 0,
+    //retourRecuPayes: 0,
+  });
+
   const [loading, setLoading] = useState(true);
 
-  // Fonction pour extraire l'ID du fournisseur du token
+  //  Extraire l'ID du fournisseur du token
   const getFournisseurId = () => {
     try {
       const authToken = localStorage.getItem('authToken');
       if (!authToken) return null;
-      
       const payload = JSON.parse(atob(authToken.split('.')[1]));
       return payload.relatedId;
     } catch (error) {
-      console.error('Erreur lors de l\'extraction de l\'ID fournisseur:', error);
+      console.error('Erreur extraction ID fournisseur:', error);
       return null;
     }
   };
 
-  // Fonction pour faire un appel API pour un état spécifique
-  const fetchStatForEtat = async (etat, token, fournisseurId) => {
+  //  Récupérer le nombre de commandes pour un état
+  const fetchStatForEtat = async (etatId, token, fournisseurId) => {
     try {
-      const response = await fetch(`http://localhost:3000/api/commandes/fournisseur/${fournisseurId}/etat/${etat}`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      });
-      
-      if (!response.ok) {
-        throw new Error(`Erreur HTTP: ${response.status}`);
-      }
-      
+      const response = await fetch(
+        `http://localhost:3000/api/commandes/fournisseur/${fournisseurId}/etat/${etatId}`,
+        {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      if (!response.ok) throw new Error(`Erreur HTTP: ${response.status}`);
       const data = await response.json();
-      return Array.isArray(data.data) ? data.data.length : 0; // Selon la structure de votre réponse API
+      return Array.isArray(data.data) ? data.data.length : 0;
     } catch (error) {
-      console.error(`Erreur lors de la récupération des stats pour l'état ${etat}:`, error);
+      console.error(`Erreur stats état ${etatId}:`, error);
       return 0;
     }
   };
 
-  // Fonction pour récupérer toutes les statistiques
+  //  Récupérer la somme des prix pour un état
+  const fetchSommeForEtat = async (etatId, token, fournisseurId) => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/api/commandes/fournisseur/${fournisseurId}/somme-prix/${etatId}`,
+        {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      if (!response.ok) throw new Error(`Erreur HTTP: ${response.status}`);
+      const data = await response.json();
+      return data.somme_prix || 0;
+    } catch (error) {
+      console.error(`Erreur somme état ${etatId}:`, error);
+      return 0;
+    }
+  };
+
+  //  Charger toutes les stats
   const fetchAllStats = async () => {
     try {
       setLoading(true);
@@ -79,52 +121,120 @@ export default function Home() {
         return;
       }
 
-      // Mapping des états avec leurs IDs
+      // Mapping des états → ID
       const etatsMapping = {
-        enAttente: 0,      // En attente
-        enCours: 1,        // En cours  
-        livres: 2,         // Livré
-        // echange: 3,     // Echange (pas utilisé dans l'UI)
-        retourExpediteurs: 5, // Retour Expéditeur
-        retourInterAgence: 7, // Retour Inter Agence
-        auDepot: 8,        // Au dépôt
-        livresPayes: 10,   // Livré payé
-        retourDepot: 11,   // Retour dépôt
-        retourRecuPayes: 30, // Retour payé
-        retourDefinitif: 31, // Retour définitif
-        // supprime: 6,    // Supprimé (pas affiché)
-        aVerifier: 20,     // A vérifier
-        // nonRecu: 9,     // Non reçu (pas utilisé dans l'UI)
-        aEnlever: 12,      // A enlever
-        enleves: 13,       // Enlevé
+        enAttente: 0,
+        //aEnlever: 12,
+        //enleves: 13,
+        auDepot: 8,
+        retourDepot: 11,
+        enCours: 1,
+        //aVerifier: 20,
+        livres: 2,
+        livresPayes: 10,
+        retourDefinitif: 31,
+        retourInterAgence: 7,
+        retourExpediteurs: 5,
+        //retourRecuPayes: 30,
       };
 
-      // Faire tous les appels API en parallèle
-      const promises = Object.entries(etatsMapping).map(async ([key, etatId]) => {
-        const count = await fetchStatForEtat(etatId, authToken, fournisseurId);
-        return [key, count];
+      const countPromises = [];
+      const sumPromises = [];
+
+      Object.entries(etatsMapping).forEach(([key, etatId]) => {
+        countPromises.push(
+          fetchStatForEtat(etatId, authToken, fournisseurId).then(count => ({ key, count }))
+        );
+        sumPromises.push(
+          fetchSommeForEtat(etatId, authToken, fournisseurId).then(somme => ({ key, somme }))
+        );
       });
 
-      const results = await Promise.all(promises);
-      
-      // Convertir les résultats en objet
+      const [countResults, sumResults] = await Promise.all([
+        Promise.all(countPromises),
+        Promise.all(sumPromises),
+      ]);
+
       const newStats = {};
-      results.forEach(([key, count]) => {
-        newStats[key] = count;
-      });
+      const newSommes = {};
+
+      countResults.forEach(({ key, count }) => { newStats[key] = count; });
+      sumResults.forEach(({ key, somme }) => { newSommes[key] = somme; });
 
       setStats(newStats);
+      setSommes(newSommes);
     } catch (error) {
-      console.error('Erreur lors de la récupération des statistiques:', error);
+      console.error('Erreur lors du chargement des statistiques:', error);
     } finally {
       setLoading(false);
     }
   };
 
-  // Charger les stats au montage du composant
   useEffect(() => {
     fetchAllStats();
   }, []);
+
+  //  Mapper les icônes
+  const getIcon = (key) => {
+    switch (key) {
+      case 'enAttente': return <FaClock className="size-5 text-white" />;
+      case 'aEnlever': return <FaTruck className="size-5 text-white" />;
+      case 'enleves': return <FaTimes className="size-5 text-white" />;
+      case 'auDepot': return <FaArchive className="size-5 text-white" />;
+      case 'retourDepot': return <FaArrowLeft className="size-5 text-white" />;
+      case 'enCours': return <FaSync className="size-5 text-white" />;
+      case 'aVerifier': return <FaCheck className="size-5 text-white" />;
+      case 'livres': return <FaCheck className="size-5 text-white" />;
+      case 'livresPayes': return <FaDollarSign className="size-5 text-white" />;
+      case 'retourDefinitif': return <FaTimes className="size-5 text-white" />;
+      case 'retourInterAgence': return <FaArrowRight className="size-5 text-white" />;
+      case 'retourExpediteurs': return <FaBox className="size-5 text-white" />;
+      case 'retourRecuPayes': return <FaDollarSign className="size-5 text-white" />;
+      default: return <FaBox className="size-5 text-white" />;
+    }
+  };
+
+  //  Mapper les couleurs
+  const getBgColor = (key) => {
+    switch (key) {
+      case 'enAttente': return 'bg-yellow-500';
+      case 'aEnlever': return 'bg-cyan-600';
+      case 'enleves': return 'bg-red-600';
+      case 'auDepot': return 'bg-blue-600';
+      case 'retourDepot': return 'bg-orange-500';
+      case 'enCours': return 'bg-indigo-600';
+      case 'aVerifier': return 'bg-purple-600';
+      case 'livres': return 'bg-green-500';
+      case 'livresPayes': return 'bg-emerald-600';
+      case 'retourDefinitif': return 'bg-red-700';
+      case 'retourInterAgence': return 'bg-teal-600';
+      case 'retourExpediteurs': return 'bg-amber-600';
+      case 'retourRecuPayes': return 'bg-emerald-700';
+      default: return 'bg-gray-600';
+    }
+  };
+
+  // 💵 Formater en TND
+  const formatTND = (amount) => {
+    return new Intl.NumberFormat('fr-TN', {
+      style: 'currency',
+      currency: 'TND',
+      minimumFractionDigits: 3,
+      maximumFractionDigits: 3,
+    }).format(amount);
+  };
+
+  // 🔤 Formater le nom affiché
+  const formatTitle = (key) => {
+    return key
+      .replace(/([A-Z])/g, ' $1')
+      .replace(/^./, str => str.toUpperCase())
+      .replace('Enleves', 'Enlevés')
+      .replace('AEnlever', 'À enlever')
+      .replace('RetourExpediteurs', 'Retour Expéditeurs')
+      .replace('RetourInterAgence', 'Retour Inter-agence')
+      .replace('RetourRecuPayes', 'Retour reçu payés');
+  };
 
   return (
     <Page title="Tableau de bord">
@@ -133,139 +243,42 @@ export default function Home() {
           <h2 className="truncate text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50">
             Tableau de bord
           </h2>
+          <p className="mt-1 text-sm text-gray-500">Statistiques de vos commandes</p>
         </div>
-        
-        {/* Section pour afficher les cartes avec les états réels */}
-        <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4 lg:grid-cols-6 2xl:gap-6">
-          <div className="rounded-lg bg-gray-150 p-3 dark:bg-dark-700 2xl:p-4">
-            <div className="flex justify-between space-x-1">
-              <p className="text-xl font-semibold text-gray-800 dark:text-dark-100">
-                {loading ? '...' : stats.enAttente}
-              </p>
-              <ClockIcon className="size-5 text-warning" />
-            </div>
-            <p className="mt-1 text-xs-plus">En attente</p>
-          </div>
-          
-          <div className="rounded-lg bg-gray-150 p-3 dark:bg-dark-700 2xl:p-4">
-            <div className="flex justify-between space-x-1">
-              <p className="text-xl font-semibold text-gray-800 dark:text-dark-100">
-                {loading ? '...' : stats.aEnlever}
-              </p>
-              <TruckIcon className="size-5 text-info" />
-            </div>
-            <p className="mt-1 text-xs-plus">À enlever</p>
-          </div>
-          
-          <div className="rounded-lg bg-gray-150 p-3 dark:bg-dark-700 2xl:p-4">
-            <div className="flex justify-between space-x-1">
-              <p className="text-xl font-semibold text-gray-800 dark:text-dark-100">
-                {loading ? '...' : stats.enleves}
-              </p>
-              <XCircleIcon className="size-5 text-error" />
-            </div>
-            <p className="mt-1 text-xs-plus">Enlevés</p>
-          </div>
-          
-          <div className="rounded-lg bg-gray-150 p-3 dark:bg-dark-700 2xl:p-4">
-            <div className="flex justify-between space-x-1">
-              <p className="text-xl font-semibold text-gray-800 dark:text-dark-100">
-                {loading ? '...' : stats.auDepot}
-              </p>
-              <ArchiveBoxIcon className="size-5 text-primary-500" />
-            </div>
-            <p className="mt-1 text-xs-plus">Au dépôt</p>
-          </div>
-          
-          <div className="rounded-lg bg-gray-150 p-3 dark:bg-dark-700 2xl:p-4">
-            <div className="flex justify-between space-x-1">
-              <p className="text-xl font-semibold text-gray-800 dark:text-dark-100">
-                {loading ? '...' : stats.retourDepot}
-              </p>
-              <ArrowLeftIcon className="size-5 text-warning" />
-            </div>
-            <p className="mt-1 text-xs-plus">Retour dépôt</p>
-          </div>
-          
-          <div className="rounded-lg bg-gray-150 p-3 dark:bg-dark-700 2xl:p-4">
-            <div className="flex justify-between space-x-1">
-              <p className="text-xl font-semibold text-gray-800 dark:text-dark-100">
-                {loading ? '...' : stats.enCours}
-              </p>
-              <ArrowPathIcon className="size-5 text-primary-500" />
-            </div>
-            <p className="mt-1 text-xs-plus">En cours</p>
-          </div>
-          
-          <div className="rounded-lg bg-gray-150 p-3 dark:bg-dark-700 2xl:p-4">
-            <div className="flex justify-between space-x-1">
-              <p className="text-xl font-semibold text-gray-800 dark:text-dark-100">
-                {loading ? '...' : stats.aVerifier}
-              </p>
-              <CheckBadgeIcon className="size-5 text-success" />
-            </div>
-            <p className="mt-1 text-xs-plus">À vérifier</p>
-          </div>
-          
-          <div className="rounded-lg bg-gray-150 p-3 dark:bg-dark-700 2xl:p-4">
-            <div className="flex justify-between space-x-1">
-              <p className="text-xl font-semibold text-gray-800 dark:text-dark-100">
-                {loading ? '...' : stats.livres}
-              </p>
-              <CheckBadgeIcon className="size-5 text-success" />
-            </div>
-            <p className="mt-1 text-xs-plus">Livrés</p>
-          </div>
-          
-          <div className="rounded-lg bg-gray-150 p-3 dark:bg-dark-700 2xl:p-4">
-            <div className="flex justify-between space-x-1">
-              <p className="text-xl font-semibold text-gray-800 dark:text-dark-100">
-                {loading ? '...' : stats.livresPayes}
-              </p>
-              <CurrencyDollarIcon className="size-5 text-secondary" />
-            </div>
-            <p className="mt-1 text-xs-plus">Livrés payés</p>
-          </div>
-          
-          <div className="rounded-lg bg-gray-150 p-3 dark:bg-dark-700 2xl:p-4">
-            <div className="flex justify-between space-x-1">
-              <p className="text-xl font-semibold text-gray-800 dark:text-dark-100">
-                {loading ? '...' : stats.retourDefinitif}
-              </p>
-              <XCircleIcon className="size-5 text-error" />
-            </div>
-            <p className="mt-1 text-xs-plus">Retour définitif</p>
-          </div>
-          
-          <div className="rounded-lg bg-gray-150 p-3 dark:bg-dark-700 2xl:p-4">
-            <div className="flex justify-between space-x-1">
-              <p className="text-xl font-semibold text-gray-800 dark:text-dark-100">
-                {loading ? '...' : stats.retourInterAgence}
-              </p>
-              <ArrowRightIcon className="size-5 text-info" />
-            </div>
-            <p className="mt-1 text-xs-plus">Retour Inter-agence</p>
-          </div>
-          
-          <div className="rounded-lg bg-gray-150 p-3 dark:bg-dark-700 2xl:p-4">
-            <div className="flex justify-between space-x-1">
-              <p className="text-xl font-semibold text-gray-800 dark:text-dark-100">
-                {loading ? '...' : stats.retourExpediteurs}
-              </p>
-              <ArrowLeftIcon className="size-5 text-warning" />
-            </div>
-            <p className="mt-1 text-xs-plus">Retour Expéditeurs</p>
-          </div>
-          
-          <div className="rounded-lg bg-gray-150 p-3 dark:bg-dark-700 2xl:p-4">
-            <div className="flex justify-between space-x-1">
-              <p className="text-xl font-semibold text-gray-800 dark:text-dark-100">
-                {loading ? '...' : stats.retourRecuPayes}
-              </p>
-              <CurrencyDollarIcon className="size-5 text-secondary" />
-            </div>
-            <p className="mt-1 text-xs-plus">Retour reçu payés</p>
-          </div>
+
+        {/* Grille des cartes */}
+        <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-6">
+          {Object.keys(stats).map((key) => {
+            const count = stats[key];
+            const amount = sommes[key];
+            const Icon = getIcon(key);
+            const bgColor = getBgColor(key);
+            const title = formatTitle(key);
+
+            return (
+              <Card className="p-4 sm:p-5" key={key}>
+                {/* Icône ronde colorée */}
+                <div
+                  className={`flex size-12 items-center justify-center rounded-xl ${bgColor} shadow-xl shadow-${bgColor.replace('bg-', '').split('-')[0]}-600/50 dark:${bgColor} dark:shadow-${bgColor.replace('bg-', '').split('-')[0]}-400/50`}
+                >
+                  {Icon}
+                </div>
+
+                {/* Titre */}
+                <p className="mt-4 text-sm font-medium text-gray-600 dark:text-dark-200">{title}</p>
+
+                {/* Nombre */}
+                <p className="mt-1 font-medium text-gray-800 dark:text-dark-100">
+                  <span className="text-2xl">{loading ? '...' : count}</span>
+                </p>
+
+                {/* Montant en TND */}
+                <p className="mt-1 text-sm text-gray-500 dark:text-dark-300">
+                  {loading ? '...' : formatTND(amount)}
+                </p>
+              </Card>
+            );
+          })}
         </div>
       </div>
     </Page>

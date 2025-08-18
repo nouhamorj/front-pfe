@@ -286,6 +286,12 @@ const protectedRoutes = {
                 Component: (await import('app/pages/Agence/Profile')).default,
               }),
             },
+            {
+              path: '/agence/rechercher',
+              lazy: async () => ({
+                Component: (await import('app/pages/Agence/RechercheColis')).default,
+              }),
+            },
           
           
           ],

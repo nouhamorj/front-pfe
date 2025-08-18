@@ -43,7 +43,7 @@ export const dashboards = {
         },
         {
             id: 'recherche-colis',
-            path: '/agence/rechercher un colis',
+            path: '/agence/rechercher',
             type: NAV_TYPE_ITEM,
             title: 'Rechercher un colis ',
             allowedRoles: ['chef_agence']
